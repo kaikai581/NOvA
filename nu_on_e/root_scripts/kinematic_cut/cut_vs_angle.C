@@ -47,13 +47,13 @@ void cut_vs_angle()
   
   TCanvas* c2 = new TCanvas("c2");
   TF1* fCut = new TF1("fCut", "cut_function(x)", 0,2);
+  fCut->SetTitle("E_{e}#theta_{e}^{2}/2m_{e} as a function of #theta_{e}");
   fCut->SetLineColor(kYellow);
   fCut->SetLineWidth(3);
   fCut->Draw();
   gPad->SetGridy(1);
   fCut->GetXaxis()->SetTitle("#theta_{e}");
   fCut->GetXaxis()->CenterTitle();
-  fCut->SetTitle("E_{e}#theta_{e}^{2}/2m_{e} as a function of #theta_{e}");
   
   TF1* fCut2 = new TF1("fCut2", "cut_function2(x)", 0,2);
   fCut2->SetLineColor(kBlue);
@@ -67,10 +67,11 @@ void cut_vs_angle()
   TLine* l = new TLine(TMath::Pi()/2,0.035,TMath::Pi()/2,2.9);
   l->Draw();
   
-  TLegend* lg = new TLegend(.2,.7,.4,.8);
+  TLegend* lg = new TLegend(.2,.67,.4,.77);
   lg->AddEntry(fCut2,"E_{#nu} = 0.1 GeV","L");
   lg->AddEntry(fCut,"E_{#nu} = 2 GeV","L");
   lg->AddEntry(fCut3,"E_{#nu} = 10 GeV","L");
   lg->SetBorderSize(0);
+  lg->SetFillColor(kWhite);
   lg->Draw();
 }
