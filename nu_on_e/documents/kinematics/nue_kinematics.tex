@@ -14,7 +14,7 @@
 \author{Shih-Kai Lin}
 %\institute[UM]{University of Minho}
 \date{}
-\title{\texorpdfstring{$\nu e$}{nu-e} kinematics \& dynamics}
+\title{\texorpdfstring{$\nu_\mu e$}{nu-e} kinematics \& dynamics}
 \begin{document}
 \begin{frame}
 \titlepage
@@ -105,12 +105,45 @@ For a neutrino scattering angle $0\leq\phi\leq\pi$, the range of the electron sc
 \end{equation}
 \end{frame}
 
-\begin{frame}{kinematical cut}
-  For small $\theta$, Eq.~\eqref{eq:lasteq} becomes $E_e\theta^2/2m\approx 1$. However, since we have the \emph{exact} formula for $E_e$, we can actually plot the function
+\begin{frame}[allowframebreaks]{kinematical cut}
+  For small $\theta$, Eq.~\eqref{eq:Ee} becomes $E_e\theta^2/2m\approx 1$. However, since we have the \emph{exact} formula for $E_e$, we can actually plot the function
 \begin{equation} \label{eq:exact_cut_function}
   f(\theta)=\frac{E_e\theta^2}{2m}=\frac{\left( 1+\frac{m}{E_\nu} \right)^2+\cos^2\theta}{\left( 1+\frac{m}{E_\nu} \right)^2-\cos^2\theta}\cdot\frac{\theta^2}{2}
 \end{equation}
 and see how close it is to $1$.
+
+\framebreak
+\begin{figure}
+\centering
+  \includegraphics[width=\textwidth]{figures/cut_func_with_angle.eps}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{$\nu_\mu e$ dynamics I}
+\tiny
+The differential cross section of $\nu_\mu e$ scattering is\footnotemark
+\begin{equation}
+  \begin{aligned}
+  \frac{d\sigma}{d\cos\theta} & = \sigma_0 \frac{4E_\nu^2(m_e+E_\nu)^2\cos\theta}{\left[ (m_e+E_\nu)^2-E_\nu^2\cos^2\theta \right]^2} \\
+  & \times \left[ g_1^2 + g_2^2\left( 1-\frac{2m_eE_\nu\cos^2\theta}{(m_e+E_\nu)^2-E_\nu^2\cos^2\theta} \right)^2 -g_1g_2
+  \frac{2m_e^2\cos^2\theta}{(m_e+E_\nu)^2-E^2_\nu\cos^2\theta} \right]
+  \end{aligned}
+\end{equation}
+, where
+\begin{eqnarray*}
+  \sigma_0 &=& \frac{2G_F^2m_e^2}{\pi}\approx 88.06\times 10^{-46} \text{ cm}^2 \\
+  g_1 &=& -\frac{1}{2}+\sin^2\theta_W \approx -0.27 \\
+  g_2 &=& \sin^2\theta_W \approx 0.23
+\end{eqnarray*}
+\footnotetext[1]{\tiny Giunti C. and Kim C. W., \textit{Fundamentals of Neutrino Physics and Astrophysics}, 2007}
+\end{frame}
+
+\begin{frame}{$\nu_\mu e$ dynamics II}
+\begin{figure}
+\centering
+  \includegraphics[width=\textwidth]{figures/diff_xsec.eps}
+\end{figure}
 \end{frame}
 
 \end{document}

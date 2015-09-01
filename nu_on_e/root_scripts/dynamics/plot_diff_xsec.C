@@ -21,7 +21,7 @@ void plot_diff_xsec()
 {
   TF1* fXsec = new TF1("fXsec", "diff_xsec(x)", 0, 1);
   fXsec->SetLineWidth(3);
-  fXsec->SetTitle("#nu_{#mu}-e differential cross section");
+  fXsec->SetTitle("#nu_{#mu}-e differential cross section (E_{#nu} = 2 GeV)");
   fXsec->Draw();
   fXsec->GetXaxis()->SetTitle("cos#theta");
   fXsec->GetXaxis()->CenterTitle();
