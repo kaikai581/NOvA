@@ -1,3 +1,6 @@
+#include "Math/GSLIntegrator.h"
+#include "Math/WrappedTF1.h"
+
 double diff_xsec(double x)
 {
   double me = 0.511e-3; // electron rest mass in GeV
@@ -19,7 +22,7 @@ double diff_xsec(double x)
 
 void plot_diff_xsec()
 {
-  TF1* fXsec = new TF1("fXsec", "diff_xsec(x)", 0, 1);
+  TF1* fXsec = new TF1("fXsec", "diff_xsec(x)", 1, 0);
   fXsec->SetLineWidth(3);
   fXsec->SetTitle("#nu_{#mu}-e differential cross section (E_{#nu} = 2 GeV)");
   fXsec->Draw();
@@ -35,6 +38,12 @@ void plot_diff_xsec()
   {
     cout << fXsec->Integral(0.01*i,1)/totXsec << endl;
   }
+  cout << totXsec << " " << fXsec->Integral(.99,1) << endl;
+  
+  ROOT::Math::GSLIntegrator ig(1.E-6,1.E-6,1000); 
+  ROOT::Math::WrappedTF1 wf(*fXsec);
+  ig.SetFunction(wf);
+  cout << ig.Integral(.9,1) << endl;
   
   //~ TCanvas* c2 = new TCanvas("c2");
   //~ TF1* fCXsec = new TF1("fCXsec", "cumul_xsec(x)", 0, 90);
