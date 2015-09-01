@@ -14,7 +14,7 @@
 \author{Shih-Kai Lin}
 %\institute[UM]{University of Minho}
 \date{}
-\title{\texorpdfstring{$\nu e$}{nu-e} kinematics}
+\title{\texorpdfstring{$\nu e$}{nu-e} kinematics \& dynamics}
 \begin{document}
 \begin{frame}
 \titlepage
@@ -23,14 +23,14 @@
 
 \begin{figure}
 \centering
-	\begin{tikzpicture}
-	  \draw [>=latex, <->] (-1,0) node [right] {$z$} -- (-1.5,0) -- (-1.5,.5) node [above] {$x$};
-	  \draw [>=latex, ->, very thick, red] (.9,1) node [left] {$(E_\nu,\vec{p}_\nu)$} -- (2.9,1);
-	  \draw [dashed] (3,1) -- +(3,0);
-	  \draw [>=latex, ->, very thick, red] (3,1) -- +(1.5,1.5) node [above right] {$(E',\vec{p}'_\nu)$};
-	  \draw (3.3,1) arc (0:45:0.3) node [right] {$\phi$};
-	  \draw [>=latex, ->, very thick, cyan] (3,1) -- +(2.598,-1.5) node [below right] {$(E_e,\vec{p})$};
-	  \draw (3.6,1) arc (0:-30:.6) node [midway, right] {$\theta$};
+  \begin{tikzpicture}
+    \draw [>=latex, <->] (-1,0) node [right] {$z$} -- (-1.5,0) -- (-1.5,.5) node [above] {$x$};
+    \draw [>=latex, ->, very thick, red] (.9,1) node [left] {$(E_\nu,\vec{p}_\nu)$} -- (2.9,1);
+    \draw [dashed] (3,1) -- +(3,0);
+    \draw [>=latex, ->, very thick, red] (3,1) -- +(1.5,1.5) node [above right] {$(E',\vec{p}'_\nu)$};
+    \draw (3.3,1) arc (0:45:0.3) node [right] {$\phi$};
+    \draw [>=latex, ->, very thick, cyan] (3,1) -- +(2.598,-1.5) node [below right] {$(E_e,\vec{p})$};
+    \draw (3.6,1) arc (0:-30:.6) node [right] {$\theta$};
   \end{tikzpicture}
 \end{figure}
 
@@ -82,9 +82,35 @@ If we eliminate $E'$ with Eq.~\eqref{eq:E}, and employ the energy-momentum relat
 \framebreak
 
 By squaring Eq.~\eqref{eq:lasteq}, and employing the energy-momentum relation again, we arrive at the answer
-\begin{equation}
-  \frac{E_e}{m}=\frac{\left( 1+\frac{m}{E_\nu} \right)^2+\cos^2\theta}{\left( 1+\frac{m}{E_\nu} \right)^2-\cos^2\theta}
+\begin{equation} \label{eq:Ee}
+  \boxed{\frac{E_e}{m}=\frac{\left( 1+\frac{m}{E_\nu} \right)^2+\cos^2\theta}{\left( 1+\frac{m}{E_\nu} \right)^2-\cos^2\theta}}
 \end{equation}
 
+If we choose to eliminate $\theta$ and $E_e$, we get
+\begin{equation} \label{eq:Ep}
+  E'=\frac{E_\nu m}{E_\nu(1-\cos\phi)+m}
+\end{equation}
+
+\framebreak
+
+Rearranging and dividing Eq.~\eqref{eq:ptotx} by Eq.~\eqref{eq:ptotz}, we have
+\begin{equation}
+  \cot\theta=\frac{\frac{E_\nu}{E'}-\cos\phi}{\sin\phi}=\left( 1+\frac{E_\nu}{m} \right)\tan\left( \frac{\phi}{2} \right)
+\end{equation}
+, where we have used Eq.~\eqref{eq:Ep} for $E_\nu/E'$.
+
+For a neutrino scattering angle $0\leq\phi\leq\pi$, the range of the electron scattering angle is
+\begin{equation}
+  \boxed{0\leq\theta\leq\frac{\pi}{2}}
+\end{equation}
 \end{frame}
+
+\begin{frame}{kinematical cut}
+  For small $\theta$, Eq.~\eqref{eq:lasteq} becomes $E_e\theta^2/2m\approx 1$. However, since we have the \emph{exact} formula for $E_e$, we can actually plot the function
+\begin{equation} \label{eq:exact_cut_function}
+  f(\theta)=\frac{E_e\theta^2}{2m}=\frac{\left( 1+\frac{m}{E_\nu} \right)^2+\cos^2\theta}{\left( 1+\frac{m}{E_\nu} \right)^2-\cos^2\theta}\cdot\frac{\theta^2}{2}
+\end{equation}
+and see how close it is to $1$.
+\end{frame}
+
 \end{document}
