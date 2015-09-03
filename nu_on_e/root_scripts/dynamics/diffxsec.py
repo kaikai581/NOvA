@@ -23,12 +23,12 @@ def diffxsec(x):
 def cumulxsec(x):
   return quad(diffxsec, x, 1)
 
-#~ def angeff(x):
-  #~ angs = np.asarray(np.radians(x))
-  #~ cosx = np.cos(angs)
-  #~ vcumulxsec = np.vectorize(cumulxsec)
-  #~ return cumulxsec(cosx)
-  #~ return np.radians(x)
+def angeff(x):
+  # angs = np.asarray(np.radians(x))
+  # cosx = np.cos(angs)
+  # vcumulxsec = np.vectorize(cumulxsec)
+  cosx = np.cos(np.radians(x))
+  return cumulxsec(cosx)
 
 #~ plot cross section
 fig1 = plt.figure()
@@ -43,12 +43,14 @@ plt.plot(t1, y)
 #~ plot angular cut efficiency
 fig2 = plt.figure()
 fig2.patch.set_facecolor('white')
-#~ print quad(diffxsec, 0, 1)
-#~ x2 = np.arange(0., 90., 0.001)
-#~ y2 = angeff(x2)
-#~ y2 = y2/quad(diffxsec, 0, 1)
-#~ vcumulxsec = np.vectorize(cumulxsec)
-y2 = cumulxsec(t1)
-plt.plot(t1,y2[0])
+ax1 = fig2.add_subplot(211)
+ax2 = fig2.add_subplot(212)
+x2 = np.arange(0., 90., 0.001)
+totxsec = quad(diffxsec, 0, 1)
+y2 = angeff(x2)
+yeff = [x/totxsec[0] for x in y2[0]]
+plt.xlabel(r'$\theta$', fontsize=16)
+plt.ylabel(r'$\epsilon_\theta$', fontsize=16)
+plt.plot(x2, yeff)
 
 plt.show()
