@@ -48,6 +48,7 @@ ax1 = fig2.add_subplot(211)
 plt.yscale('log', nonposy='clip')
 plt.xlabel(r'$\cos\theta$', fontsize=16, labelpad=0)
 plt.ylabel(r'$\frac{d\sigma}{d\cos\theta}/\sigma_0$', fontsize=16)
+plt.title(r'$E_\nu = 2$ GeV')
 plt.plot(t1, y, linewidth=2.0)
 
 ax2 = fig2.add_subplot(212)
