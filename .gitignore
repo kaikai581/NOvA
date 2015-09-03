@@ -36,3 +36,6 @@
 *.log
 *.out
 *.gz
+
+# OS X specific
+.DS_Store
