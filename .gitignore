@@ -36,6 +36,9 @@
 *.log
 *.out
 *.gz
+*.nav
+*.snm
+*.toc
 
 # OS X specific
 .DS_Store
