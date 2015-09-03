@@ -1,0 +1,2 @@
+angle of 90% efficiency: 4.56332165788
+angle of 99% efficiency: 14.8442275858
