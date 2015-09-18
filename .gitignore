@@ -42,3 +42,9 @@
 
 # OS X specific
 .DS_Store
+
+# ROOT files
+*.root
+
+# Data folders
+output

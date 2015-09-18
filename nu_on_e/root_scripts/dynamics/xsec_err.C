@@ -26,6 +26,11 @@ void xsec_err(int ninstances = 10000)
   TRandom3 ran_me(0);
   TRandom3 ran_s2thw(0);
   
+  TFile* outf = new TFile("output/xsec.root");
+  TTree tr("tr");
+  double xsec = 0;
+  
+  
   for(int i = 0; i < ninstances; i++)
   {
     double Fc = ran_Fc.Gaus(1.1663787e-5, 0.0000006e-5);
