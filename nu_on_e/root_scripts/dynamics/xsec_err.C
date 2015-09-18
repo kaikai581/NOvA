@@ -20,22 +20,25 @@ double xsec_unit_energy(double Fc, double me, double s2thw)
   return G_F2*me/2/TMath::Pi()*(term1+term2);
 }
 
-void xsec_err(int ninstances = 10000)
+void xsec_err(int ninstances = 1000000)
 {
   TRandom3 ran_Fc(0);
   TRandom3 ran_me(0);
   TRandom3 ran_s2thw(0);
   
-  TFile* outf = new TFile("output/xsec.root");
-  TTree tr("tr");
+  TFile outf("output/xsec.root", "recreate");
+  TTree tr("tr", "cross-section tree");
   double xsec = 0;
-  
+  tr.Branch("xsec", &xsec, "xsec/D");
   
   for(int i = 0; i < ninstances; i++)
   {
     double Fc = ran_Fc.Gaus(1.1663787e-5, 0.0000006e-5);
     double me = ran_me.Gaus(0.5109989461e-3, 0.0000000031e-3);
     double s2thw = ran_s2thw.Gaus(0.2223, 0.0021);
-    cout << xsec_unit_energy(Fc, me, s2thw) << endl;
+    xsec = xsec_unit_energy(Fc, me, s2thw);
+    tr.Fill();
   }
+  
+  tr.Write();
 }

@@ -1,0 +1,40 @@
+\documentclass{beamer}
+\beamertemplatenavigationsymbolsempty
+\usefonttheme[stillsansseriflarge]{serif}
+\setbeamertemplate{footline}[frame number]
+\usepackage[type1]{libertine}
+\usepackage{bbold}
+\usepackage{tikz}
+%\usetheme{Warsaw}
+% \usetheme{Goettingen} alternative themes
+% \usetheme{Hannover}
+% \usetheme{Marburg}
+% \usetheme{PaloAlto}
+%\title[Geek’s Night : Velha-A-Branca – March 2, 2010]{Introduction of Aspect Oriented Programming}
+\author{Shih-Kai Lin}
+%\institute[UM]{University of Minho}
+\date{}
+\title{\texorpdfstring{$\nu_\mu e$}{nu-e} cross-section error propagation}
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+\begin{frame}[allowframebreaks]{}
+\scriptsize
+Let $\sin^2\theta_W=x$ and ignore the multiplicative term $\frac{G_F^2m_eE_\nu}{2\pi}$, we want to know the standard deviation in $f=1-4x+\frac{16}{3}x^2$. The error propagation formula reads
+\begin{equation}
+  \sigma_f^2=\left(\left.\frac{df}{dx}\right\vert_{x=x_0}\right)^2\sigma_x^2
+\end{equation}
+where $x_0$ is the central value of $x$. \\
+Given $x_0=0.23126$ and $\sigma_x=2.2\times10^{-4}$, $f'(x_0)=-1.5332267$, and
+\begin{eqnarray*}
+  \sigma_f^2&=&(-1.5332267)^2\times(2.2\times10^{-4})^2 \\
+  &=&0.000000117 \\
+  \Rightarrow \sigma_f &=& 0.000341731
+\end{eqnarray*}
+
+Given $f(x_0)=0.360193001$, the relative uncertainty in $f$ is $\frac{\sigma_f}{f(x_0)}=0.09\%$.
+
+\end{frame}
+
+\end{document}
