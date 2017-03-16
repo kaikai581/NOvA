@@ -1,0 +1,124 @@
+\begin{longtable}{|c|c|c|X|c|}
+\hline
+enum & name in code & name in manual & description & enable \\
+\hline \hline
+0 & Null & - & - & $\times$ \\
+\hline \hline
+1 & MaNCEL &  & tweak Ma NCEL, affects dsigma(NCEL)/dQ2 both in shape and normalization & $\checkmark$ \\
+\hline
+2 & EtaNCEL &  & tweak NCEL strange axial form factor eta, affects dsigma(NCEL)/dQ2 both in shape and normalization &\\
+\hline \hline
+3 & NormCCQE & & tweak CCQE normalization (energy independent) &\\
+\hline
+4 & NormCCQEenu & & tweak CCQE normalization (maintains dependence on neutrino energy) &\\
+\hline
+5 & MaCCQEshape & & tweak Ma CCQE, affects dsigma(CCQE)/dQ2 in shape only (normalized to constant integral) &\\
+\hline
+6 & MaCCQE & & tweak Ma CCQE, affects dsigma(CCQE)/dQ2 both in shape and normalization &\\
+\hline
+7 & VecCCQEshape & & tweak elastic nucleon form factors (BBA/default -> dipole) - shape only effect of dsigma(CCQE)/dQ2 &\\
+\hline \hline
+8 & NormCCRES & & tweak CCRES normalization &\\
+\hline
+9 & MaCCRESshape & & tweak Ma CCRES, affects d2sigma(CCRES)/dWdQ2 in shape only (normalized to constant integral) &\\
+\hline
+10 & MvCCRESshape & & tweak Mv CCRES, affects d2sigma(CCRES)/dWdQ2 in shape only (normalized to constant integral) &\\
+\hline
+11 & MaCCRES & & tweak Ma CCRES, affects d2sigma(CCRES)/dWdQ2 both in shape and normalization &\\
+\hline
+12 & MvCCRES & & tweak Mv CCRES, affects d2sigma(CCRES)/dWdQ2 both in shape and normalization &\\
+\hline
+13 & NormNCRES & & tweak NCRES normalization & \\
+\hline
+14 & MaNCRESshape & & tweak Ma NCRES, affects d2sigma(NCRES)/dWdQ2 in shape only (normalized to constant integral) & \\
+\hline
+15 & MvNCRESshape && tweak Mv NCRES, affects d2sigma(NCRES)/dWdQ2 in shape only (normalized to constant integral) &\\
+\hline
+16 & MaNCRES && tweak Ma NCRES, affects d2sigma(NCRES)/dWdQ2 both in shape and normalization & \\
+\hline
+17 & MvNCRES && tweak Mv NCRES, affects d2sigma(NCRES)/dWdQ2 both in shape and normalization & \\
+\hline \hline
+18 & MaCOHpi && tweak Ma for COH pion production & \\
+\hline
+19 & R0COHpi && tweak R0 for COH pion production & \\
+\hline
+20 & RvpCC1pi && tweak the 1pi non-RES bkg in the RES region, for v+p CC & \\
+\hline
+21 & RvpCC2pi && tweak the 2pi non-RES bkg in the RES region, for v+p CC & \\
+\hline
+22 & RvpNC1pi && tweak the 1pi non-RES bkg in the RES region, for v+p NC & \\
+\hline
+23 & RvpNC2pi && tweak the 2pi non-RES bkg in the RES region, for v+p NC & \\
+\hline
+24 & RvnCC1pi && tweak the 1pi non-RES bkg in the RES region, for v+n CC & \\
+\hline
+25 & RvnCC2pi && tweak the 2pi non-RES bkg in the RES region, for v+n CC & \\
+\hline
+26 & RvnNC1pi && tweak the 1pi non-RES bkg in the RES region, for v+n NC & \\
+\hline
+27 & RvnNC2pi && tweak the 2pi non-RES bkg in the RES region, for v+n NC & \\
+\hline
+28 & RvbarpCC1pi && tweak the 1pi non-RES bkg in the RES region, for vbar+p CC & \\
+\hline
+29 & RvbarpCC2pi && tweak the 2pi non-RES bkg in the RES region, for vbar+p CC & \\
+\hline
+30 & RvbarpNC1pi && tweak the 1pi non-RES bkg in the RES region, for vbar+p NC & \\
+\hline
+31 & RvbarpNC2pi && tweak the 2pi non-RES bkg in the RES region, for vbar+p NC & \\
+\hline
+32 & RvbarnCC1pi && tweak the 1pi non-RES bkg in the RES region, for vbar+n CC & \\
+\hline
+33 & RvbarnCC2pi && tweak the 2pi non-RES bkg in the RES region, for vbar+n CC & \\
+\hline
+34 & RvbarnNC1pi && tweak the 1pi non-RES bkg in the RES region, for vbar+n NC & \\
+\hline
+35 & RvbarnNC2pi && tweak the 2pi non-RES bkg in the RES region, for vbar+n NC & \\
+\hline \hline
+36 & AhtBY && tweak the Bodek-Yang model parameter A_\{ht\} - incl. both shape and normalization effect & \\
+%\hline
+%37 & BhtBY && \text{tweak the Bodek-Yang model parameter B_{ht} - incl. both shape and normalization effect} & \\
+%\hline
+%38 & CV1uBY && tweak the Bodek-Yang model parameter CV1u - incl. both shape and normalization effect & \\
+%\hline
+%39 & CV2uBY && tweak the Bodek-Yang model parameter CV2u - incl. both shape and normalization effect & \\
+%\hline
+%40 & AhtBYshape && \text{tweak the Bodek-Yang model parameter A_{ht} - shape only effect to d2sigma(DIS)/dxdy} & \\
+%\hline
+%41 & BhtBYshape && \text{tweak the Bodek-Yang model parameter B_{ht} - shape only effect to d2sigma(DIS)/dxdy} & \\
+%\hline
+%42 & CV1uBYshape && tweak the Bodek-Yang model parameter CV1u - shape only effect to d2sigma(DIS)/dxdy & \\
+%\hline
+%43 & CV2uBYshape && tweak the Bodek-Yang model parameter CV2u - shape only effect to d2sigma(DIS)/dxdy & \\
+%\hline
+%44 & NormDISCC && tweak the inclusive DIS CC normalization (not currently working in genie) & \\
+%\hline
+%45 & RnubarnuCC && tweak the ratio of \sigma(\bar\nu CC) / \sigma(\nu CC) (not currently working in genie) & \\
+%\hline
+%46 & DISNuclMod && tweak DIS nuclear modification (shadowing, anti-shadowing, EMC).  Does not appear to be working in GENIE at the moment & \\
+%\hline \hline
+%47 & NC && - & \\
+%\hline \hline
+%48 & AGKY_xF1pi && tweak xF distribution for low multiplicity (N + pi) DIS f/s produced by AGKY & \\
+%\hline
+%49 & AGKY_pT1pi && tweak pT distribution for low multiplicity (N + pi) DIS f/s produced by AGKY & \\
+%\hline \hline
+%50 & FormZone && tweak formation zone & \\
+%\hline \hline
+%51 & MFP_pi && tweak mean free path for pions & \\
+%\hline
+%52 & MFP_N && tweak mean free path for nucleons & \\
+%\hline
+%53 & FrCEx_pi && tweak charge exchange probability for pions, for given total rescattering probability & \\
+%\hline
+%54 & FrElas_pi && tweak elastic probability for pions, for given total rescattering probability & \\
+%\hline
+%55 & FrInel_pi && tweak inelastic probability for pions, for given total rescattering probability & \\
+%\hline
+%56 & FrAbs_pi && tweak absorption probability for pions, for given total rescattering probability & \\
+%\hline
+%57 & FrPiProd_pi && tweak pion production probability for pions, for given total rescattering probability & \\
+%\hline
+%58 & FrCEx_N && tweak charge exchange probability for nucleons, for given total rescattering probability & \\
+\hline
+\hline
+\end{longtable}
