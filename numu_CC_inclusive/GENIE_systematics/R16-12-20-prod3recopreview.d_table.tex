@@ -1,124 +1,141 @@
 \begin{longtable}{|c|c|c|X|c|}
 \hline
-enum & name in code & name in manual & description & enable \\
+enum & name in code & name in manual & description & enabled \\
 \hline \hline
 0 & Null & - & - & $\times$ \\
 \hline \hline
-1 & MaNCEL &  & tweak Ma NCEL, affects dsigma(NCEL)/dQ2 both in shape and normalization & $\checkmark$ \\
+1 & MaNCEL & $x_{M_A^{NCEL}}$ & tweak Ma NCEL, affects dsigma(NCEL)/dQ2 both in shape and normalization & $\checkmark$ \\
 \hline
-2 & EtaNCEL &  & tweak NCEL strange axial form factor eta, affects dsigma(NCEL)/dQ2 both in shape and normalization &\\
+2 & EtaNCEL & $x_{\eta^{NCEL}}$ & tweak NCEL strange axial form factor eta, affects dsigma(NCEL)/dQ2 both in shape and normalization &$\checkmark$\\
 \hline \hline
-3 & NormCCQE & & tweak CCQE normalization (energy independent) &\\
+3 & NormCCQE & $x_{CCQE-Norm}$ & tweak CCQE normalization (energy independent) &$\times$\\
 \hline
-4 & NormCCQEenu & & tweak CCQE normalization (maintains dependence on neutrino energy) &\\
+4 & NormCCQEenu & & tweak CCQE normalization (maintains dependence on neutrino energy) &$\times$\\
 \hline
-5 & MaCCQEshape & & tweak Ma CCQE, affects dsigma(CCQE)/dQ2 in shape only (normalized to constant integral) &\\
+5 & MaCCQEshape & & tweak Ma CCQE, affects dsigma(CCQE)/dQ2 in shape only (normalized to constant integral) &$\times$\\
 \hline
-6 & MaCCQE & & tweak Ma CCQE, affects dsigma(CCQE)/dQ2 both in shape and normalization &\\
+6 & MaCCQE & $x_{M_A^{CCQE}}$ & tweak Ma CCQE, affects dsigma(CCQE)/dQ2 both in shape and normalization &$\checkmark$\\
 \hline
-7 & VecCCQEshape & & tweak elastic nucleon form factors (BBA/default -> dipole) - shape only effect of dsigma(CCQE)/dQ2 &\\
+7 & VecCCQEshape & $x_{CCQE-VecFF}$ & tweak elastic nucleon form factors (BBA/default -> dipole) - shape only effect of dsigma(CCQE)/dQ2 &$\checkmark$\\
 \hline \hline
-8 & NormCCRES & & tweak CCRES normalization &\\
+8 & NormCCRES & $x_{CCRES-Norm}$& tweak CCRES normalization &$\times$\\
 \hline
-9 & MaCCRESshape & & tweak Ma CCRES, affects d2sigma(CCRES)/dWdQ2 in shape only (normalized to constant integral) &\\
+9 & MaCCRESshape & & tweak Ma CCRES, affects d2sigma(CCRES)/dWdQ2 in shape only (normalized to constant integral) &$\times$\\
 \hline
-10 & MvCCRESshape & & tweak Mv CCRES, affects d2sigma(CCRES)/dWdQ2 in shape only (normalized to constant integral) &\\
+10 & MvCCRESshape & & tweak Mv CCRES, affects d2sigma(CCRES)/dWdQ2 in shape only (normalized to constant integral) &$\times$\\
 \hline
-11 & MaCCRES & & tweak Ma CCRES, affects d2sigma(CCRES)/dWdQ2 both in shape and normalization &\\
+11 & MaCCRES & $x_{M_A^{CCRES}}$ & tweak Ma CCRES, affects d2sigma(CCRES)/dWdQ2 both in shape and normalization &$\checkmark$\\
 \hline
-12 & MvCCRES & & tweak Mv CCRES, affects d2sigma(CCRES)/dWdQ2 both in shape and normalization &\\
+12 & MvCCRES &$x_{M_V^{CCRES}}$ & tweak Mv CCRES, affects d2sigma(CCRES)/dWdQ2 both in shape and normalization &$\checkmark$\\
 \hline
-13 & NormNCRES & & tweak NCRES normalization & \\
+13 & NormNCRES & $x_{NCRES-Norm}$& tweak NCRES normalization & $\times$\\
 \hline
-14 & MaNCRESshape & & tweak Ma NCRES, affects d2sigma(NCRES)/dWdQ2 in shape only (normalized to constant integral) & \\
+14 & MaNCRESshape & & tweak Ma NCRES, affects d2sigma(NCRES)/dWdQ2 in shape only (normalized to constant integral) & $\times$\\
 \hline
-15 & MvNCRESshape && tweak Mv NCRES, affects d2sigma(NCRES)/dWdQ2 in shape only (normalized to constant integral) &\\
+15 & MvNCRESshape && tweak Mv NCRES, affects d2sigma(NCRES)/dWdQ2 in shape only (normalized to constant integral) &$\times$\\
 \hline
-16 & MaNCRES && tweak Ma NCRES, affects d2sigma(NCRES)/dWdQ2 both in shape and normalization & \\
+16 & MaNCRES & $x_{M_A^{NCRES}}$ & tweak Ma NCRES, affects d2sigma(NCRES)/dWdQ2 both in shape and normalization & $\checkmark$\\
 \hline
-17 & MvNCRES && tweak Mv NCRES, affects d2sigma(NCRES)/dWdQ2 both in shape and normalization & \\
+17 & MvNCRES &$x_{M_V^{NCRES}}$& tweak Mv NCRES, affects d2sigma(NCRES)/dWdQ2 both in shape and normalization & $\checkmark$\\
 \hline \hline
-18 & MaCOHpi && tweak Ma for COH pion production & \\
+18 & MaCOHpi &$x_{M_A^{COHpi}}$& tweak Ma for COH pion production & $\checkmark$\\
 \hline
-19 & R0COHpi && tweak R0 for COH pion production & \\
+19 & R0COHpi &$x_{R_0^{COHpi}}$& tweak R0 for COH pion production & $\checkmark$\\
 \hline
-20 & RvpCC1pi && tweak the 1pi non-RES bkg in the RES region, for v+p CC & \\
+20 & RvpCC1pi &$x_{R_{bkg}^{\nu p,CC1\pi}}$& tweak the 1pi non-RES bkg in the RES region, for v+p CC & $\checkmark$\\
 \hline
-21 & RvpCC2pi && tweak the 2pi non-RES bkg in the RES region, for v+p CC & \\
+21 & RvpCC2pi &$x_{R_{bkg}^{\nu p,CC2\pi}}$& tweak the 2pi non-RES bkg in the RES region, for v+p CC & $\checkmark$\\
 \hline
-22 & RvpNC1pi && tweak the 1pi non-RES bkg in the RES region, for v+p NC & \\
+22 & RvpNC1pi &$x_{R_{bkg}^{\nu p,NC1\pi}}$& tweak the 1pi non-RES bkg in the RES region, for v+p NC & $\checkmark$\\
 \hline
-23 & RvpNC2pi && tweak the 2pi non-RES bkg in the RES region, for v+p NC & \\
+23 & RvpNC2pi &$x_{R_{bkg}^{\nu p,NC2\pi}}$& tweak the 2pi non-RES bkg in the RES region, for v+p NC & $\checkmark$\\
 \hline
-24 & RvnCC1pi && tweak the 1pi non-RES bkg in the RES region, for v+n CC & \\
+24 & RvnCC1pi &$x_{R_{bkg}^{\nu n,CC1\pi}}$& tweak the 1pi non-RES bkg in the RES region, for v+n CC & $\checkmark$\\
 \hline
-25 & RvnCC2pi && tweak the 2pi non-RES bkg in the RES region, for v+n CC & \\
+25 & RvnCC2pi &$x_{R_{bkg}^{\nu n,CC2\pi}}$& tweak the 2pi non-RES bkg in the RES region, for v+n CC & $\checkmark$\\
 \hline
-26 & RvnNC1pi && tweak the 1pi non-RES bkg in the RES region, for v+n NC & \\
+26 & RvnNC1pi &$x_{R_{bkg}^{\nu n,NC1\pi}}$& tweak the 1pi non-RES bkg in the RES region, for v+n NC & $\checkmark$\\
 \hline
-27 & RvnNC2pi && tweak the 2pi non-RES bkg in the RES region, for v+n NC & \\
+27 & RvnNC2pi &$x_{R_{bkg}^{\nu n,NC2\pi}}$& tweak the 2pi non-RES bkg in the RES region, for v+n NC & $\checkmark$\\
 \hline
-28 & RvbarpCC1pi && tweak the 1pi non-RES bkg in the RES region, for vbar+p CC & \\
+28 & RvbarpCC1pi && tweak the 1pi non-RES bkg in the RES region, for vbar+p CC & $\checkmark$\\
 \hline
-29 & RvbarpCC2pi && tweak the 2pi non-RES bkg in the RES region, for vbar+p CC & \\
+29 & RvbarpCC2pi && tweak the 2pi non-RES bkg in the RES region, for vbar+p CC & $\checkmark$\\
 \hline
-30 & RvbarpNC1pi && tweak the 1pi non-RES bkg in the RES region, for vbar+p NC & \\
+30 & RvbarpNC1pi && tweak the 1pi non-RES bkg in the RES region, for vbar+p NC & $\checkmark$\\
 \hline
-31 & RvbarpNC2pi && tweak the 2pi non-RES bkg in the RES region, for vbar+p NC & \\
+31 & RvbarpNC2pi && tweak the 2pi non-RES bkg in the RES region, for vbar+p NC & $\checkmark$\\
 \hline
-32 & RvbarnCC1pi && tweak the 1pi non-RES bkg in the RES region, for vbar+n CC & \\
+32 & RvbarnCC1pi && tweak the 1pi non-RES bkg in the RES region, for vbar+n CC & $\checkmark$\\
 \hline
-33 & RvbarnCC2pi && tweak the 2pi non-RES bkg in the RES region, for vbar+n CC & \\
+33 & RvbarnCC2pi && tweak the 2pi non-RES bkg in the RES region, for vbar+n CC & $\checkmark$\\
 \hline
-34 & RvbarnNC1pi && tweak the 1pi non-RES bkg in the RES region, for vbar+n NC & \\
+34 & RvbarnNC1pi && tweak the 1pi non-RES bkg in the RES region, for vbar+n NC & $\checkmark$\\
 \hline
-35 & RvbarnNC2pi && tweak the 2pi non-RES bkg in the RES region, for vbar+n NC & \\
+35 & RvbarnNC2pi && tweak the 2pi non-RES bkg in the RES region, for vbar+n NC & $\checkmark$\\
 \hline \hline
-36 & AhtBY && tweak the Bodek-Yang model parameter A_\{ht\} - incl. both shape and normalization effect & \\
-%\hline
-%37 & BhtBY && \text{tweak the Bodek-Yang model parameter B_{ht} - incl. both shape and normalization effect} & \\
-%\hline
-%38 & CV1uBY && tweak the Bodek-Yang model parameter CV1u - incl. both shape and normalization effect & \\
-%\hline
-%39 & CV2uBY && tweak the Bodek-Yang model parameter CV2u - incl. both shape and normalization effect & \\
-%\hline
-%40 & AhtBYshape && \text{tweak the Bodek-Yang model parameter A_{ht} - shape only effect to d2sigma(DIS)/dxdy} & \\
-%\hline
-%41 & BhtBYshape && \text{tweak the Bodek-Yang model parameter B_{ht} - shape only effect to d2sigma(DIS)/dxdy} & \\
-%\hline
-%42 & CV1uBYshape && tweak the Bodek-Yang model parameter CV1u - shape only effect to d2sigma(DIS)/dxdy & \\
-%\hline
-%43 & CV2uBYshape && tweak the Bodek-Yang model parameter CV2u - shape only effect to d2sigma(DIS)/dxdy & \\
-%\hline
-%44 & NormDISCC && tweak the inclusive DIS CC normalization (not currently working in genie) & \\
-%\hline
-%45 & RnubarnuCC && tweak the ratio of \sigma(\bar\nu CC) / \sigma(\nu CC) (not currently working in genie) & \\
-%\hline
-%46 & DISNuclMod && tweak DIS nuclear modification (shadowing, anti-shadowing, EMC).  Does not appear to be working in GENIE at the moment & \\
-%\hline \hline
-%47 & NC && - & \\
-%\hline \hline
-%48 & AGKY_xF1pi && tweak xF distribution for low multiplicity (N + pi) DIS f/s produced by AGKY & \\
-%\hline
-%49 & AGKY_pT1pi && tweak pT distribution for low multiplicity (N + pi) DIS f/s produced by AGKY & \\
-%\hline \hline
-%50 & FormZone && tweak formation zone & \\
-%\hline \hline
-%51 & MFP_pi && tweak mean free path for pions & \\
-%\hline
-%52 & MFP_N && tweak mean free path for nucleons & \\
-%\hline
-%53 & FrCEx_pi && tweak charge exchange probability for pions, for given total rescattering probability & \\
-%\hline
-%54 & FrElas_pi && tweak elastic probability for pions, for given total rescattering probability & \\
-%\hline
-%55 & FrInel_pi && tweak inelastic probability for pions, for given total rescattering probability & \\
-%\hline
-%56 & FrAbs_pi && tweak absorption probability for pions, for given total rescattering probability & \\
-%\hline
-%57 & FrPiProd_pi && tweak pion production probability for pions, for given total rescattering probability & \\
-%\hline
-%58 & FrCEx_N && tweak charge exchange probability for nucleons, for given total rescattering probability & \\
+36 & AhtBY &$x_{A_{HT}^{BY}}$& tweak the Bodek-Yang model parameter A\_\{ht\} - incl. both shape and normalization effect & $\checkmark$\\
 \hline
+37 & BhtBY &$x_{B_{HT}^{BY}}$& tweak the Bodek-Yang model parameter B\_\{ht\} - incl. both shape and normalization effect & $\checkmark$\\
+\hline
+38 & CV1uBY &$x_{C_{V1u}^{BY}}$& tweak the Bodek-Yang model parameter CV1u - incl. both shape and normalization effect & $\checkmark$\\
+\hline
+39 & CV2uBY &$x_{C_{V2u}^{BY}}$& tweak the Bodek-Yang model parameter CV2u - incl. both shape and normalization effect & $\checkmark$\\
+\hline
+40 & AhtBYshape && tweak the Bodek-Yang model parameter A\_\{ht\} - shape only effect to d2sigma(DIS)/dxdy & $\times$\\
+\hline
+41 & BhtBYshape && tweak the Bodek-Yang model parameter B\_\{ht\} - shape only effect to d2sigma(DIS)/dxdy & $\times$\\
+\hline
+42 & CV1uBYshape && tweak the Bodek-Yang model parameter CV1u - shape only effect to d2sigma(DIS)/dxdy & $\times$\\
+\hline
+43 & CV2uBYshape && tweak the Bodek-Yang model parameter CV2u - shape only effect to d2sigma(DIS)/dxdy & $\times$\\
+\hline
+44 & NormDISCC &$x_{CCDIS}$& tweak the inclusive DIS CC normalization (not currently working in genie) & $\times$\\
+\hline
+45 & RnubarnuCC &$x_{CC\bar{\nu}/\nu}$& tweak the ratio of sigma(bar nu CC) / sigma(nu CC) (not currently working in genie) & $\times$\\
+\hline
+46 & DISNuclMod &$x_{DIS-NuclMod}$& tweak DIS nuclear modification (shadowing, anti-shadowing, EMC).  Does not appear to be working in GENIE at the moment & $\times$\\
+\hline \hline
+47 & NC && - & $\checkmark$\\
+\hline \hline
+48 & AGKY\_xF1pi &$x_{AGKY}^{xF1\pi}$& tweak xF distribution for low multiplicity (N + pi) DIS f/s produced by AGKY & $\checkmark$\\
+\hline
+49 & AGKY\_pT1pi &$x_{AGKY}^{pT1\pi}$& tweak pT distribution for low multiplicity (N + pi) DIS f/s produced by AGKY & $\checkmark$\\
+\hline \hline
+50 & FormZone &$x_{fz}$& tweak formation zone & $\checkmark$\\
+\hline \hline
+51 & MFP\_pi &$x_{mfp}^\pi$& tweak mean free path for pions & $\checkmark$\\
+\hline
+52 & MFP\_N &$x_{mfp}^N$& tweak mean free path for nucleons & $\checkmark$\\
+\hline
+53 & FrCEx\_pi &$x_{cex}^\pi$& tweak charge exchange probability for pions, for given total rescattering probability & $\checkmark$\\
+\hline
+54 & FrElas\_pi &$x_{el}^\pi$& tweak elastic probability for pions, for given total rescattering probability & $\checkmark$\\
+\hline
+55 & FrInel\_pi &$x_{inel}^\pi$& tweak inelastic probability for pions, for given total rescattering probability & $\checkmark$\\
+\hline
+56 & FrAbs\_pi &$x_{abs}^\pi$& tweak absorption probability for pions, for given total rescattering probability & $\checkmark$\\
+\hline
+57 & FrPiProd\_pi &$x_\pi^\pi$& tweak pion production probability for pions, for given total rescattering probability & $\checkmark$\\
+\hline\hline
+58 & FrCEx\_N &$x_{cex}^N$& tweak charge exchange probability for nucleons, for given total rescattering probability & $\checkmark$\\
+\hline
+59 & FrElas\_N &$x_{el}^N$& tweak elastic probability for nucleons, for given total rescattering probability & $\checkmark$\\
+\hline
+60 & FrInel\_N &$x_{inel}^N$& tweak inelastic  probability for nucleons, for given total rescattering probability & $\checkmark$\\
+\hline
+61 & FrAbs\_N &$x_{abs}^N$& tweak absorption probability for nucleons, for given total rescattering probability & $\checkmark$\\
+\hline
+62 & FrPiProd\_N &$x_\pi^N$& tweak pion production probability for nucleons, for given total rescattering probability & $\checkmark$\\
+\hline\hline
+63 & CCQEPauliSupViaKF &$x_{CCQE-PauliSup}$& - & $\checkmark$\\
+\hline
+64 & CCQEMomDistroFGtoSF && - & $\checkmark$\\
+\hline\hline
+65 & BR1gamma &$x_{BR}^{R\rightarrow X+1\gamma}$& tweak Resonance -> X + gamma branching ratio, eg Delta+(1232) -> p gamma & $\checkmark$\\
+\hline
+66 & BR1eta &$x_{BR}^{R\rightarrow X+1\eta}$& tweak Resonance -> X + eta   branching ratio, eg N+(1440) -> p eta & $\checkmark$\\
+\hline
+67 & Theta\_Delta2Npi &$x_{\theta_\pi}^{\Delta \rightarrow \pi N}$& distort pi angular distribution in Delta -> N + pi & $\checkmark$\\
 \hline
 \end{longtable}
