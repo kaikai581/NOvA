@@ -1,0 +1,82 @@
+# calhit
+#include "CalHitAna.fcl"
+
+# slicer
+#include "SlicerAna.fcl"
+
+# kalmantrack/kalmantrackmerge
+#include "KalmanTrackAna.fcl"
+
+# cosmictrack/windowtrack
+#include "CosmicTrack.fcl"
+
+# fuzzyk
+#include "FuzzyKValidate.fcl"
+
+# elasticarms/houghvertex
+#include "ElasticArmsValidate.fcl"
+
+# multihough
+#include "HoughValidate.fcl"
+
+# breakpoint specific
+#include "BreakPointAna.fcl"
+#include "BPFEnergyAna.fcl"
+
+#include "BackTracker.fcl"
+#include "services.fcl"
+
+process_name: RecoValid
+
+services:
+{
+  TFileService: { fileName: "reco_validation_histos.root" }
+  @table::standard_services
+}
+services.BackTracker: @local::standard_backtracker
+
+source:
+{
+  module_type: RootInput
+  maxEvents:   -1
+}
+
+outputs: {}
+
+physics:
+{
+  producers:{}
+
+  analyzers:
+  {
+    calhitana:      @local::standard_calhitana
+    slicerana:      @local::standard_slicerana
+    multihoughana:  @local::standard_houghvalidate
+    elasticarmsana: @local::standard_elasticarmsvalidate
+    houghvertexana: @local::standard_elasticarmsvalidate
+    fuzzykana:      @local::standard_fuzzykvalidate
+    kalmantrackana: @local::standard_kalmantrackana
+#    breakpointana:  @local::standard_breakpointana
+    bpfenergyana:   @local::standard_bpfenergyana
+    cosmictrackana: @local::standard_cosmictrackana
+    windowtrackana: @local::window_cosmictrackana
+  }
+
+  validation: [
+                calhitana,
+                slicerana,
+                multihoughana,
+                elasticarmsana,
+                houghvertexana,
+                fuzzykana,
+                kalmantrackana,
+#                breakpointana,
+                bpfenergyana,
+                cosmictrackana,
+                windowtrackana
+              ]
+
+  end_paths:  [ validation ]
+}
+
+physics.analyzers.houghvertexana.VertexLabel: "houghvertex"
