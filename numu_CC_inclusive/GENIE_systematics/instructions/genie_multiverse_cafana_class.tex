@@ -53,7 +53,7 @@
 %% Choose Font %%
 %\usepackage{fontspec}
 %\setmainfont{Fontin}
-\usepackage{libertine}
+%\usepackage{libertine}
 \usepackage{graphicx}
 \usepackage{tabularx}
 \usepackage{ltxtable}
@@ -63,10 +63,27 @@
 
 \begin{document}
 
-\title{GENIE Systematic Uncertainties with the Multiverse Approach in CAFAna}
+\title{GENIE Systematic Uncertainties with the Multi-universe Approach in CAFAna}
 
 \section{Overview}
-The standard approach for drawing the NOvA systematic error band from GENIE cross section models is to vary the GENIE tunable physics parameters by $N$ $\sigma$'s, $N\in\{-2,-1,1,2\}$, input this number through the shift parameter of the CAFAna Spectrum class, and obtain shifted spectra as the boundaries of the error band. There are tens of tunable GENIE parameters, hereafter referred to as GENIE knobs, but only a few of them having the biggest effects are varied. This leaves somewhat arbitrary where to leave out the knobs.\\
-A consistent way of treating the GENIE systematic uncertainties across all analyses, known as the multiverse approach, was proposed, which varies all the knobs at the same time.
+The standard approach for drawing the NOvA systematic error band from GENIE cross section models is to vary the GENIE tunable physics parameters by $N$ $\sigma$'s, $N\in\{-2,-1,1,2\}$, input this number through the shift parameter of the CAFAna Spectrum class, and obtain shifted spectra as the boundaries of the error band. There are tens of tunable GENIE parameters, hereafter referred to as GENIE knobs, but only a few of them having the biggest effects are varied. This leaves somewhat arbitrary where to leave out the knobs.\\\\
+A consistent way of treating the GENIE systematic uncertainties across all analyses, known as the multi-universe approach, was proposed, which varies all the knobs at the same time. One advantage of this approach is it enables bin-to-bin correlation studies which could be in turn followed by dimensionality reduction analyses such as principal component analysis (PCA)~\cite{ref1}.\\\\
+In this note details of the implementation of this approach under the CAFAna framework is given, followed by sanity checks of this approach compared with the conventional way. Then some known issues are discussed. In the end the computing resources consumed by this class is presented.
 
+\section{Implementation}
+The code can be found, under NOvA's offline repository, in \path{CAFAna/XSec/GenieMultiverseSyst.[h,cxx]}. There are several classes defined in the files, where \texttt{MultiverseSpectra} takes on a central role.\\\\
+Since there are tens of GENIE tunable knobs, to switch the knobs on and off easily, a so called knob configuration file is input into the class with a default name of \texttt{knob\_config.txt} and a default path of the current directory.\\\\
+With the development of theories, new knobs could be added into GENIE. To account for the possible difference in the tunable parameters used in different production datasets, a script is offered to make a configuration file based on the underlying GENIE versions of the production datasets, located in \path{CAFAna/XSec/Utilities/make_template_knob_config.py}. To use this scrip, simply do:
+\begin{enumerate}
+  \item setup nova
+  \item \texttt{\$ python make\_template\_knob\_config.py -d \textless sam\_defname\textgreater}
+\end{enumerate}
+This script generate a complete set of GENIE knobs with the name of a knob followed by a number. The names are extracted from the source file \path{$NUTOOLS_DIR/source/NuReweight/ReweightLabels.h}, with the leading ``\texttt{fReweight}" or ``\texttt{kReweight}" stripped. The number following a knob name assumes 3 numbers, namely 0, 1, or 2. 0 means it is disabled, like it does not exist at all. If it is 1, a random number is drawn from a normal distribution $\mathcal{N}(0,1)$, and used to construct a \texttt{SystShifts} object as an input argument to the \texttt{Spectrum} class. If it is 2, it means the knob chooses between two alternative models. In this case, a random number is drawn from $\{0,1\}$ with equal probability, where 0 represents the nominal model, and 1 represents the alternative model.\\\\
+A default configuration file is available 
+
+\section*{References}
+\begin{thebibliography}{10}
+  \bibitem{ref1} Bannanje Nitish Nayak, PPFX Systematics, \url{https://nova-docdb.fnal.gov:441/cgi-bin/ShowDocument?docid=18996}
+\end{thebibliography}
+  
 \end{document}
