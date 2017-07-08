@@ -50,6 +50,12 @@
 %\usepackage{alltt}
 %\usepackage{underscore}
 
+% Use the following lines to restore the footnote line.
+\makeatletter
+\def\footnoterule{\kern-3\p@
+  \hrule \@width 2in \kern 2.6\p@} % the \hrule is .4pt high
+\makeatother
+
 %% Choose Font %%
 %\usepackage{fontspec}
 %\setmainfont{Fontin}
@@ -66,20 +72,32 @@
 \title{GENIE Systematic Uncertainties with the Multi-universe Approach in CAFAna}
 
 \section{Overview}
-The standard approach for drawing the NOvA systematic error band from GENIE cross section models is to vary the GENIE tunable physics parameters by $N$ $\sigma$'s, $N\in\{-2,-1,1,2\}$, input this number through the shift parameter of the CAFAna Spectrum class, and obtain shifted spectra as the boundaries of the error band. There are tens of tunable GENIE parameters, hereafter referred to as GENIE knobs, but only a few of them having the biggest effects are varied. This leaves somewhat arbitrary where to leave out the knobs.\\\\
-A consistent way of treating the GENIE systematic uncertainties across all analyses, known as the multi-universe approach, was proposed, which varies all the knobs at the same time. One advantage of this approach is it enables bin-to-bin correlation studies which could be in turn followed by dimensionality reduction analyses such as principal component analysis (PCA)~\cite{ref1}.\\\\
+The standard approach for drawing the NOvA systematic error band from GENIE cross section models is to vary the GENIE tunable physics parameters by $N$ $\sigma$'s, $N\in\{-2,-1,1,2\}$, input this number through the shift parameter of the CAFAna Spectrum class, and obtain shifted spectra as the boundaries of the error band. There are tens of tunable GENIE parameters, hereafter referred to as GENIE knobs, but only a few of them having the biggest effects are varied. This leaves somewhat arbitrary where to leave out the knobs.
+
+A consistent way of treating the GENIE systematic uncertainties across all analyses, known as the multi-universe approach, was proposed, which varies all the knobs at the same time. One advantage of this approach is it enables bin-to-bin correlation studies which could be in turn followed by dimensionality reduction analyses such as principal component analysis (PCA)~\cite{ref1}.
+
 In this note details of the implementation of this approach under the CAFAna framework is given, followed by sanity checks of this approach compared with the conventional way. Then some known issues are discussed. In the end the computing resources consumed by this class is presented.
 
 \section{Implementation}
-The code can be found, under NOvA's offline repository, in \path{CAFAna/XSec/GenieMultiverseSyst.[h,cxx]}. There are several classes defined in the files, where \texttt{MultiverseSpectra} takes on a central role.\\\\
-Since there are tens of GENIE tunable knobs, to switch the knobs on and off easily, a so called knob configuration file is input into the class with a default name of \texttt{knob\_config.txt} and a default path of the current directory.\\\\
+The code can be found, under NOvA's offline repository, in \path{CAFAna/XSec/GenieMultiverseSyst.[h,cxx]}. There are several classes defined in the files, where \texttt{MultiverseSpectra} takes on a central role.
+
+Since there are tens of GENIE tunable knobs, to switch the knobs on and off easily, a so called knob configuration file is input into the class with a default name of \texttt{knob\_config.txt} and a default path of the current directory.
+
 With the development of theories, new knobs could be added into GENIE. To account for the possible difference in the tunable parameters used in different production datasets, a script is offered to make a configuration file based on the underlying GENIE versions of the production datasets, located in \path{CAFAna/XSec/Utilities/make_template_knob_config.py}. To use this scrip, simply do:
 \begin{enumerate}
   \item setup nova
   \item \texttt{\$ python make\_template\_knob\_config.py -d \textless sam\_defname\textgreater}
 \end{enumerate}
-This script generate a complete set of GENIE knobs with the name of a knob followed by a number. The names are extracted from the source file \path{$NUTOOLS_DIR/source/NuReweight/ReweightLabels.h}, with the leading ``\texttt{fReweight}" or ``\texttt{kReweight}" stripped. The number following a knob name assumes 3 numbers, namely 0, 1, or 2. 0 means it is disabled, like it does not exist at all. If it is 1, a random number is drawn from a normal distribution $\mathcal{N}(0,1)$, and used to construct a \texttt{SystShifts} object as an input argument to the \texttt{Spectrum} class. If it is 2, it means the knob chooses between two alternative models. In this case, a random number is drawn from $\{0,1\}$ with equal probability, where 0 represents the nominal model, and 1 represents the alternative model. Note that even for this kind of knobs mode 1 can still be used. In this case CAFAna does a linear evolution from the weight of the first model to that of the second model.\\\\
-A default configuration file is available in \path{CAFAna/XSec/Utilities/knob_config.txt}. By and large it enables all available knobs, and uses mode 2 whenever the knob is for alternative models. However, some knobs tune the same physical parameter. For example, \texttt{MaCCQE} tunes the normalization and shape for CCQE at the same time, and \texttt{NormCCQE} and \texttt{MaCCQEshape} tune normalization and shape of CCQE, respectively. To avoid double counting, the three knobs should not be enabled at the same time.
+This script generates a complete set of GENIE knobs with the name of a knob followed by a number. The names are extracted from the source file \texttt{\$NUTOOLS\_DIR/source/NuReweight/ReweightLabels.h}, with the leading ``\texttt{fReweight}" or ``\texttt{kReweight}" stripped. The number following a knob name assumes 3 numbers, namely 0, 1, or 2. 0 means it is disabled, like it does not exist at all. If it is 1, a random number is drawn from a normal distribution $\mathcal{N}(0,1)$, and used to construct a \texttt{SystShifts} object as an input argument to the \texttt{Spectrum} class. If it is 2, it means the knob chooses between two alternative models. In this case, a random number is drawn from $\{0,1\}$ with equal probability, where 0 represents the nominal model, and 1 represents the alternative model. Note that even for this kind of knobs mode 1 can still be used. In this case CAFAna does a linear evolution from the weight of the first model to that of the second model.
+
+A default configuration file is available in \path{CAFAna/XSec/Utilities/knob_config.txt}. By and large it enables all available knobs, and uses mode 2 whenever the knob is for alternative models. However, some knobs tune the same physical parameter. For example, \texttt{MaCCQE} tunes the normalization and shape for CCQE at the same time, and \texttt{NormCCQE} and \texttt{MaCCQEshape} tune normalization and shape of CCQE, respectively. To avoid double counting, the three knobs should not be enabled at the same time. According to the former studies~\footnote{Please refer to page 15 in \href{https://nova-docdb.fnal.gov:441/cgi-bin/ShowDocument?docid=15214}{DocDB-15214}.}, decision was made to enable separate knobs and disable the combined one.
+
+\subsection{Interface}
+The interface is designed to mimic that of the \texttt{Spectrum} class as close as possible, with two more constructor arguments. One is the number of universes one would like to generate, and the other is the pathname of the knob configuration file. Please consult the \href{http://nusoft.fnal.gov/nova/novasoft/doxygen/html/classana_1_1MultiverseSpectra.html}{doxygen page} for detailed information.
+
+Once you have created a multi-universe object and filled them with the \texttt{SpectrumLoader::Go()} function call, you can start to extract the needed information, namely, the error band.
+
+To obtain the spectrum above the nominal spectrum, use \path{MultiverseSpectra::UpperSigma()}. Similarly, \path{MultiverseSpectra::LowerSigma()} gives you the spectrum below the nominal one. The boundaries of the error band are obtained in the following way. For each bin of the spectrum, each universe has a different number of events.
 
 \section*{References}
 \begin{thebibliography}{10}
