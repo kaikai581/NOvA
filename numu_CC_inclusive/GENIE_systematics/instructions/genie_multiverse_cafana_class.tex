@@ -97,7 +97,13 @@ The interface is designed to mimic that of the \texttt{Spectrum} class as close 
 
 Once you have created a multi-universe object and filled them with the \texttt{SpectrumLoader::Go()} function call, you can start to extract the needed information, namely, the error band.
 
-To obtain the spectrum above the nominal spectrum, use \path{MultiverseSpectra::UpperSigma()}. Similarly, \path{MultiverseSpectra::LowerSigma()} gives you the spectrum below the nominal one. The boundaries of the error band are obtained in the following way. For each bin of the spectrum, each universe has a different number of events.
+To obtain the spectrum above the nominal spectrum, use \path{MultiverseSpectra::UpperSigma()}. Similarly, \path{MultiverseSpectra::LowerSigma()} gives you the spectrum below the nominal one. The boundaries of the error band are obtained in the following way. For each bin of the spectrum, each universe has a different number of events. If one plots the distribution of number of events in a bin, usually it is not symmetric.
+\begin{figure}\label{spread}
+  \centering
+  \includegraphics[width=.6\textwidth]{figures/spread_from_different_points.eps}
+  \caption{Different choices for the center of the distribution. The nominal value is in red. The mean and the median are drawn from the unbinned sequence of values. For the most probable value (yellow), it is estimated by the Kernel Density Estimation (KDE) algorithm. The yellow curve is the continuous distribution reconstructed by the algorithm.}
+\end{figure}
+The class offers several options for the center of the distribution to draw the spread of the distribution from. Figure~\ref{spread} shows the options to draw the spread from. The default option is set to the nominal value. Once a center is chosen, the upper boundary is drawn from the center such that there are 34\% of universes enclosed in the center line and the upper bound. The lower boundary is obtained in the same way.
 
 \section*{References}
 \begin{thebibliography}{10}
