@@ -43,6 +43,7 @@
 \usepackage[letterpaper]{geometry}
 \newcommand{\gguide}{{\it Preparing graphics for IOP journals}}
 %Uncomment next line if AMS fonts required
+\usepackage{adjustbox}
 \usepackage{iopams}  
 \usepackage{graphicx}
 \usepackage[breaklinks=true,colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue]{hyperref}
@@ -132,7 +133,51 @@ To obtain the spectrum above the nominal spectrum, use \path{MultiverseSpectra::
 The class offers several options for the center of the distribution to draw the spread of the distribution from. Figure~\ref{fig:spread} shows the options to draw the spread from. The default option is set to the nominal value. Once a center is chosen, the upper boundary is drawn from the center such that 34\% of the universes are enclosed in the center line and the upper bound. The lower boundary is obtained in the same way. Figure~\ref{fig:boundaries} shows the boundaries determined by this procedure. Note that the number of universes outside the upper and lower lines are not equal since, in general, the median of the distribution is not the same as the central value you decide to draw the band from. The resulting error band obtained with this approach is shown in Figure~\ref{fig:reco_nue_w_error}.
 
 \section{Performance}
-Generating the same number of spectra with this class is significantly slower than generating usual spectra. An investigation was conducted trying to identify the time consuming processes of this class.
+It is observed that generating the same number of spectra with this class is significantly slower than generating usual spectra. An investigation was conducted trying to identify the time consuming processes of this class.
+
+\texttt{CAFAna} incorporates the Google Performance Tools to analyze runtime performance of \texttt{CAFAna} scripts. To invoke this function, simply do:
+\begin{verbatim}
+$ cafe --perf <name_of_script>
+\end{verbatim}
+After cafe finishes the script, the perftool is then executed, and a pdf file recording the computing resources used by the stages of the script is generated. The pdf file with the filename \path{perf_all_knobs.pdf} also included in this document shows the analysis result of a multi-universe script with all knobs enabled. The file \path{perf_one_knob.pdf}, on the other hand, shows the result of the same script running over the same number of universes and files, but with only one knob enabled. The \path{caf::Proxy::GetValue} function call uses significantly less time when enabling much fewer knobs, indicating that the performance hit might be simply due to the shear number of enabled knobs.
+
+\subsection{Knobs with larger effects on the error band}
+The observation drawn from the google perf tools leads to the idea that a limited list of knobs with non-negligible contribution to the systematic error band might improve the CPU time significantly. A study of single knob effect on the muon kinematic variables is used to evaluate the size of effect of individual knobs. Table~\ref{tab:single_knob_details} lists the details of this study.
+\begin{table}[h]
+  \centering
+  \scriptsize
+  \begin{tabular}{|c|c|}
+    \hline
+    dataset & \path{prod_caf_R17-03-01-prod3reco.d_nd_genie_nonswap_fhc_nova_v08_full_v1} \\
+    \hline
+    variables & \texttt{kTrueMuKE \& kTrueMuCostheta} defined in \path{NDAna/numucc_inc} \\
+    \hline
+    cuts & \texttt{kAllNumuCCCuts} defined in \path{NDAna/numucc_inc} \\
+    \hline
+    weights & \texttt{kPPFXFluxCVWgt * kXSecCVWgt2017} \\
+    \hline
+    number of universes & 100 \\
+    \hline
+  \end{tabular}
+  \label{tab:single_knob_details}
+  \caption{Details of the single knob effect study.}
+\end{table}
+
+After the spectrum and the error band of each single knob is obtained, the width of the band is divided by the nominal value bin by bin, and fit to a constant polynomial. The fit value then serves as the size of the error of this knob. Figure~\ref{fig:true_mu_ang} shows the effects of individual knobs obtained by the above process. If a cut is made at 1\%, the selected knobs are NormCCQE, MaCCQEshape, MaCCQE, VecCCQEshape, NormCCRES, MaCCRES, MvCCRES, RvpCC2pi, RvnCC1pi, RvnCC2pi, FormZone, MFP\textunderscore pi, MFP\textunderscore N, and CCQEPauliSupViaKF. We can repeat this process for the muon kinetic energy, where the effects of single knobs are shown in Figure~\ref{fig:true_mu_ke}. The two variable give slightly different results, and the union of the two selected knob sets is used as the list of significant knobs.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{figures/t_cos.pdf}
+  \caption{Single knob effect for the muon truth angle.}
+  \label{fig:true_mu_ang}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{figures/t_muke.pdf}
+  \caption{Single knob effect for the muon truth kinetic energy.}
+  \label{fig:true_mu_ke}
+\end{figure}
 
 \section*{References}
 \begin{thebibliography}{10}
