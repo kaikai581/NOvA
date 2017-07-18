@@ -47,6 +47,7 @@
 \usepackage{iopams}  
 \usepackage{graphicx}
 \usepackage[breaklinks=true,colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue]{hyperref}
+\usepackage{subfig}
 %\usepackage[T1]{fontenc}
 %\usepackage{alltt}
 %\usepackage{underscore}
@@ -159,11 +160,24 @@ The observation drawn from the google perf tools leads to the idea that a limite
     number of universes & 100 \\
     \hline
   \end{tabular}
-  \label{tab:single_knob_details}
   \caption{Details of the single knob effect study.}
+  \label{tab:single_knob_details}
 \end{table}
 
-After the spectrum and the error band of each single knob is obtained, the width of the band is divided by the nominal value bin by bin, and fit to a constant polynomial. The fit value then serves as the size of the error of this knob. Figure~\ref{fig:true_mu_ang} shows the effects of individual knobs obtained by the above process. If a cut is made at 1\%, the selected knobs are NormCCQE, MaCCQEshape, MaCCQE, VecCCQEshape, NormCCRES, MaCCRES, MvCCRES, RvpCC2pi, RvnCC1pi, RvnCC2pi, FormZone, MFP\textunderscore pi, MFP\textunderscore N, and CCQEPauliSupViaKF. We can repeat this process for the muon kinetic energy, where the effects of single knobs are shown in Figure~\ref{fig:true_mu_ke}. The two variable give slightly different results, and the union of the two selected knob sets is used as the list of significant knobs.
+After the spectrum and the error band of each single knob is obtained, the width of the band is divided by the nominal value bin by bin, and fit to a constant polynomial. The fit value then serves as the size of the error of this knob. Figure~\ref{fig:true_mu_ang} shows the effects of individual knobs obtained by the above process. If a cut is made at 1\%, the selected knobs are NormCCQE, MaCCQEshape, MaCCQE, VecCCQEshape, NormCCRES, MaCCRES, MvCCRES, RvpCC2pi, RvnCC1pi, RvnCC2pi, FormZone, MFP\textunderscore pi, MFP\textunderscore N, and CCQEPauliSupViaKF. We can repeat this process for the muon kinetic energy, where the effects of single knobs are shown in Figure~\ref{fig:true_mu_ke}. The two variable give slightly different results, and the union of the two selected knob sets is used as the list of significant knobs. Table~\ref{tab:selected_knobs} lists the selected significant knobs obtained this way.
+\begin{table}
+  \centering
+  \begin{tabular}{|llll|}
+    \hline
+    \path{NormCCQE} & \path{MaCCQEshape} & \path{VecCCQEshape} & \path{NormCCRES} \\
+    \path{RvpCC1pi} & \path{RvpCC2pi} & \path{RvnCC1pi} & \path{RvnCC2pi} \\
+    \path{FormZone} & \path{MFP_pi} & \path{MFP_N} & \path{FrInel_pi} \\
+    \path{FrElas_N} & \path{FrInel_N} & \path{CCQEPauliSupViaKF} & \\
+    \hline
+  \end{tabular}
+  \caption{A list of significant knobs determined by this study.}
+  \label{tab:selected_knobs}
+\end{table}
 
 \begin{figure}[h]
   \centering
@@ -178,6 +192,63 @@ After the spectrum and the error band of each single knob is obtained, the width
   \caption{Single knob effect for the muon truth kinetic energy.}
   \label{fig:true_mu_ke}
 \end{figure}
+
+Figure~\ref{fig:error_muke_all} and Figure~\ref{fig:error_muke_selected} show the error bands for the muon kinetic energy from all and partially enabled knobs, respectively. By forming the ratio of between the all- and partial-knob-enabled spectra (Figure~\ref{fig:ratio_muke}), it is seen that the difference is within 10\% level (5\% for each shift). Table~\ref{tab:computing_all} and~\ref{tab:computing_selected} list the computing resources used by the jobs with all knobs and partial knobs enabled, respectively. From the table a 40\% reduction in real time and a 70\% reduction in CPU time is observed.
+\paragraph{Bottom line} By using a limited set of knobs with effects larger than 1\%, the error bands differ by 5\%, and the class takes 40\% less time to run through.
+
+\begin{figure}[h]
+  \centering
+  \subfloat[all knobs]{\includegraphics[width=.5\textwidth]{figures/t_muke_all.pdf}\label{fig:error_muke_all}}
+  \hfill
+  \subfloat[selected knobs]{\includegraphics[width=.5\textwidth]{figures/t_muke_limited.pdf}\label{fig:error_muke_selected}}
+  \caption{Error band for muon kinetic energy.}
+\end{figure}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=.9\textwidth]{figures/t_muke_ratio.pdf}
+  \caption{Ratio of the all-knob-enabled spectrum and partially enabled one for up and down shifts for muon kinetic energy.}
+  \label{fig:ratio_muke}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \subfloat[all knobs]{\includegraphics[width=.5\textwidth]{figures/t_cos_all.pdf}}
+  \hfill
+  \subfloat[selected knobs]{\includegraphics[width=.5\textwidth]{figures/t_cos_limited.pdf}}
+  \caption{Error band for muon $\cos\theta$.}
+  \label{fig:error_muang}
+\end{figure}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=.9\textwidth]{figures/t_cos_ratio.pdf}
+  \caption{Ratio of the all-knob-enabled spectrum and partially enabled one for up and down shifts for muon $\cos\theta$.}
+  \label{fig:ratio_muang}
+\end{figure}
+
+\begin{table}
+  \centering
+  \subfloat[all knobs]{\begin{tabular}{|ll|}
+    \hline
+    Used   & \\
+    \hline
+    Memory & 287.7 MiB \\
+    Disk   & 0.0 GiB \\
+    Wall Time & 2h52m42s \\
+    CPU Time & 1h40m25s \\
+    \hline
+  \end{tabular}\label{tab:computing_all}}
+  \subfloat[selected knobs]{\begin{tabular}{|ll|}
+    \hline
+    Used   & \\
+    \hline
+    Memory & 265.7 MiB \\
+    Disk   & 0.0 GiB \\
+    Wall Time & 1h40m41s \\
+    CPU Time & 30m56s \\
+    \hline
+  \end{tabular}\label{tab:computing_selected}}
+  \caption{Computing resources used by jobs with all and partially-enabled knobs.}
+\end{table}
 
 \section*{References}
 \begin{thebibliography}{10}
