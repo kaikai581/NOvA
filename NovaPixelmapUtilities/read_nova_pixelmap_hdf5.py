@@ -21,7 +21,8 @@ entry = args.entry
 ch = args.channel
 
 dataset = inf['/data']
-label = inf['/label']
+label   = inf['/label']
+eid     = inf['/id']
 
 predefined_labes = []
 predefined_labes.append('kNumuQE')
@@ -59,10 +60,11 @@ data_read = dataset[...]
 label_read= label[...]
 print('Printing data...')
 
+idstr = '_{}_{}_{}_{}'.format(eid[entry][0][0][0], eid[entry][0][0][1], eid[entry][0][0][2], eid[entry][0][0][3])
 H = np.array(data_read[entry][ch])
 fig = plt.figure(figsize=(6, 3.2))
 ax = fig.add_subplot(111)
-ax.set_title(predefined_labes[label_read[entry][0][0][0]])
+ax.set_title(predefined_labes[label_read[entry][0][0][0]]+idstr)
 plt.imshow(H)
 ax.set_aspect('equal')
 
