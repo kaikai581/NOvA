@@ -161,8 +161,8 @@ $\mathbf{w}$ that minimizes the cost function is readily found by solving the \e
 \end{equation}
 \end{frame}
 
-\begin{frame}{Ridge Regression}
-\scriptsize
+\begin{frame}{Ridge Regression and Dual Form}
+\tiny
 Very often, the predictor variables vary in a similar way, known as near collinearity. In such cases, $\mathbf{X}^T\mathbf{X}$ is almost singular, and the resulting $\mathbf{w}$ becomes highly sensitive to variations, leading to overfitting.\\
 Applying Tikhonov regularization leads to ridge regression, namely, minimizing the cost function
 \begin{equation}
@@ -172,9 +172,13 @@ with the solution
 \begin{equation}
   \mathbf{w}=(\mathbf{X}^T\mathbf{X}+\alpha\mathbf{I})^{-1}\mathbf{X}^T\mathbf{y}
 \end{equation}
-The cost function is convex, which guarantees a global minimum. (Very different for NN case.)\\
+\textcolor{blue}{The cost function is convex, which guarantees a global minimum. (Very different from NN case.)}\\
 Note that $\mathbf{w}$ can be rewritten\footnote{See \href{http://stat.wikia.com/wiki/Kernel_Ridge_Regression}{here} for details.} as $\mathbf{w}=\mathbf{X}^T(\mathbf{X}\mathbf{X}^T+\alpha\mathbf{I})^{-1}\mathbf{y}$.\\
-For a test sample $\hat{\mathbf{x}}$, the predicted value $\hat{y}=\mathbf{w}^T\hat{\mathbf{x}}=\hat{\mathbf{x}}^T\mathbf{w}$
+For a test sample $\hat{\mathbf{x}}$, the predicted value $\hat{y}=\mathbf{w}^T\hat{\mathbf{x}}=\hat{\mathbf{x}}^T\mathbf{w}=\hat{\mathbf{x}}^T\mathbf{X}^T(\mathbf{X}\mathbf{X}^T+\alpha\mathbf{I})^{-1}\mathbf{y}$. Now, let $\mathbf{a}=(\mathbf{X}\mathbf{X}^T+\alpha\mathbf{I})^{-1}\mathbf{y}$, we arrive at the \textcolor{red}{\emph{dual form}}:
+\begin{equation}
+  \hat{y}=\sum_{i=1}^{N}a_i\mathbf{x}_i^T\hat{\mathbf{x}}
+\end{equation}
+, i.e., instead of solving for $\mathbf{w}$, we solve for $\mathbf{a}$.
 \end{frame}
 
 \end{document}
