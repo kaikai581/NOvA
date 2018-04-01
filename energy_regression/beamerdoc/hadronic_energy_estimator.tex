@@ -39,6 +39,7 @@
 \usefonttheme[onlymath]{serif}
 \usepackage{amsmath}
 \usepackage{bm}
+\usepackage{empheq}
 \usepackage{eso-pic}
 \usepackage{fontspec}
 \usepackage{textcomp}
@@ -62,6 +63,9 @@
     colorlinks = true,
     urlcolor = cyan
 }
+
+% Define color "lightgreen" for highlighting equarions
+\definecolor{lightgreen}{HTML}{90EE90}
 
 \addtobeamertemplate{frametitle}{}{%
 \begin{textblock*}{100mm}(.80\textwidth,-1.55cm)
@@ -136,7 +140,7 @@
   \end{tabular}
   \normalsize
   \begin{itemize}
-    \item A cohort of \emph{kernel methods} belongs to shallow architecture, among which the support vector machine was so popular that it almost killed neural network in the early 2000 before CNN took the crown.
+    \item A cohort of \emph{kernel methods} belongs to shallow architecture, among which the support vector machine was so popular that it almost killed neural network in the early 2000s before CNN took the crown.
     \item I will quickly go through the ideas behind kernel methods to justify the use of them for an energy estimator.
   \end{itemize}
 \end{frame}
@@ -205,9 +209,9 @@ $\mathbf{w}$ can be rewritten as
 \mathbf{w}=\mathbf{X}^T(\mathbf{X}\mathbf{X}^T+\alpha\mathbf{I})^{-1}\mathbf{y}
 \end{equation}
 With this \emph{dual form}, given a test sample $\mathbf{x}_t$, the predicted value is
-\begin{equation}
+\begin{equation} \label{eq:sol}
 \hat{y}_t=\sum_{i=1}^{N}a_i\mathbf{x}_i^T\mathbf{x}_t
-\end{equation} \label{eq:sol}
+\end{equation}
 Here, $\mathbf{a}=(\mathbf{X}\mathbf{X}^T+\alpha\mathbf{I})^{-1}\mathbf{y}$, and $\mathbf{X}\mathbf{X}^T$ is a Gram matrix with elements $[\mathbf{X}\mathbf{X}^T]_{ij}=\mathbf{x}_i^T\mathbf{x}_j$.
 \end{frame}
 
@@ -223,8 +227,8 @@ Formula obtained with the linear case apply here, as long as $\mathbf{x}$ is rep
 \begin{frame}{Kernel Trick}
 \begin{itemize}
   \item Note that in the solution formula \ref{eq:sol}, every occurrence of a regressor $\mathbf{x}$ is accompanied by another regressor $\mathbf{x}'$ in the form of an inner product of the two.
-  \item In the nonlinear case, it's $\bm{\phi}^T(\mathbf{x})\bm{\phi}(\mathbf{x}')$.
-  \item If we can find a kernel function $k:\mathbb{R}^\ell\times\mathbb{R}^\ell\rightarrow\mathbb{R}$ such that $k(\mathbf{x},\mathbf{x}')=\bm{\phi}^T(\mathbf{x})\bm{\phi}(\mathbf{x}')$, $\forall\mathbf{x},\mathbf{x}'\in\mathbb{R}^\ell$, then we can obtain the solution without actually performing the feature map, which is computationally heavy and sometimes even impossible (ex. infinite dimensional feature space).
+  \item In the nonlinear case, it's $\bm{\phi}(\mathbf{x})^T\bm{\phi}(\mathbf{x}')$.
+  \item If we can find a kernel function $k:\mathbb{R}^\ell\times\mathbb{R}^\ell\rightarrow\mathbb{R}$ such that $k(\mathbf{x},\mathbf{x}')=\bm{\phi}(\mathbf{x})^T\bm{\phi}(\mathbf{x}')$, $\forall\mathbf{x},\mathbf{x}'\in\mathbb{R}^\ell$, then we can obtain the solution without actually performing the feature map, which is computationally heavy and sometimes even impossible (ex. infinite-dimensional feature space).
   \item Note that given a kernel the feature map and feature space are not unique.
 \end{itemize}
 \end{frame}
@@ -248,6 +252,38 @@ For $\ell=1$, a heuristic feature map of the RBF kernel is
   \end{itemize}
     \item The hyperparameter $\gamma$ controls how far the effect of a training sample can reach.
 \end{itemize}
+\end{frame}
+
+\begin{frame}{Representer Theorem and Kernel Ridge Regression}
+The solution function in the nonlinear problem to minimize a class of loss functions, including the squared loss with $L_2$ penalty, is
+\begin{empheq}[box=\colorbox{lightgreen}]{equation}
+  f(\mathbf{x})=\sum_{i=1}^{N}a_ik(\mathbf{x}_i,\mathbf{x})
+\end{empheq}
+, where $\mathbf{a}=(\mathbf{K}+\alpha\mathbf{I})^{-1}\mathbf{y}$ and $K_{ij}=k(\mathbf{x}_i,\mathbf{x}_j)$.
+\begin{itemize}
+  \item Clearly a generalization to eq. \ref{eq:sol}.
+  \item Ridge regression with kernel trick is the \textcolor{blue}{kernel ridge regression (KRR)}, one of the few machine learning algorithms with a closed form solution.
+  \item I have tried support vector regression (SVR) as well. Since KRR works better, I will only show results from KRR.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Features of Kernel Methods}
+  \begin{itemize}
+    \item Unlike the \emph{binned} spline fit, this is an \emph{unbinned} algorithm.
+    \item Positive definite kernels\footnote{Most commonly used kernels belong to this class, including RBF, but not sigmoid.} make the loss function convex. Therefore, a global minimum is guaranteed.
+    \begin{itemize}
+      \item Very different from neural networks.
+    \end{itemize}
+    \item Functions drawn from the RBF kernel are \emph{very smooth}.
+    \begin{itemize}
+      \item No more kinks in the regression curve/surface/hypersurface.
+    \end{itemize}
+    \item Including more variables is a no-brainer.
+    \begin{itemize}
+      \item How to engineer a regression surface embedded in 3D after all? More dimension?
+      \item Opens up ``feature engineering".
+    \end{itemize}
+  \end{itemize}
 \end{frame}
 
 \end{document}
