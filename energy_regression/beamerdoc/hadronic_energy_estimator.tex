@@ -38,6 +38,7 @@
 \usepackage{textpos}
 \usefonttheme[onlymath]{serif}
 \usepackage{amsmath}
+\usepackage{bm}
 \usepackage{eso-pic}
 \usepackage{fontspec}
 \usepackage{textcomp}
@@ -140,45 +141,113 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Ideas behind Kernel Methods -- from the Most Basic}
+%\begin{frame}{Ideas behind Kernel Methods -- from the Most Basic}
+%\scriptsize
+%Linear regression:\\
+%Given $N$ training samples, $(\mathbf{x}_i,y_i)$, $i=1,...,N$, where $\mathbf{x}_i$'s $\in\mathbb{R}^\ell$ are predictor variables and $y_i$'s $\in\mathbb{R}$ are target variables of training samples, find a linear function
+%\begin{equation}
+%  f_\mathbf{w}(\mathbf{x})=\mathbf{w}^T\mathbf{x}
+%\end{equation}
+%that minimizes the quadratic cost,
+%\begin{equation}
+%  C(\mathbf{w})=\frac{1}{2}\sum_{i=1}^{N}(y_i-\mathbf{w}^T\mathbf{x}_i)^2
+%\end{equation}
+%$\mathbf{w}$ that minimizes the cost function is readily found by solving the \emph{normal equation}:
+%\begin{equation}
+%  \mathbf{X}^T\mathbf{X}\mathbf{w}=\mathbf{X}^T\mathbf{y}
+%\end{equation}
+%, where $\mathbf{X}$ is the so called \emph{design matrix}, 
+%\begin{equation}
+%  \mathbf{X}=\begin{pmatrix}\mathbf{x}_1^T \\ \vdots \\ \mathbf{x}_N^T \end{pmatrix}
+%\end{equation}
+%\end{frame}
+%
+%\begin{frame}{Ridge Regression and Dual Form}
+%\tiny
+%Very often, the predictor variables vary in a similar way, known as near collinearity. In such cases, $\mathbf{X}^T\mathbf{X}$ is almost singular, and the resulting $\mathbf{w}$ becomes highly sensitive to variations, leading to overfitting.\\
+%Applying Tikhonov regularization leads to ridge regression, namely, minimizing the cost function
+%\begin{equation}
+%  C(\mathbf{w})=\frac{1}{2}\sum_{i=1}^{N}(y_i-\mathbf{w}^T\mathbf{x}_i)^2+\frac{1}{2}\alpha\Vert\mathbf{w}\Vert^2
+%\end{equation}
+%with the solution
+%\begin{equation}
+%  \mathbf{w}=(\mathbf{X}^T\mathbf{X}+\alpha\mathbf{I})^{-1}\mathbf{X}^T\mathbf{y}
+%\end{equation}
+%\textcolor{blue}{The cost function is convex, which guarantees a global minimum. (Very different from NN case.)}\\
+%Note that $\mathbf{w}$ can be rewritten\footnote{See \href{http://stat.wikia.com/wiki/Kernel_Ridge_Regression}{here} for details.} as $\mathbf{w}=\mathbf{X}^T(\mathbf{X}\mathbf{X}^T+\alpha\mathbf{I})^{-1}\mathbf{y}$.\\
+%For a test sample $\hat{\mathbf{x}}$, the predicted value $\hat{y}=\mathbf{w}^T\hat{\mathbf{x}}=\hat{\mathbf{x}}^T\mathbf{w}=\hat{\mathbf{x}}^T\mathbf{X}^T(\mathbf{X}\mathbf{X}^T+\alpha\mathbf{I})^{-1}\mathbf{y}$. Now, let $\mathbf{a}=(\mathbf{X}\mathbf{X}^T+\alpha\mathbf{I})^{-1}\mathbf{y}$, we arrive at the \textcolor{red}{\emph{dual form}}:
+%\begin{equation}
+%  \hat{y}=\sum_{i=1}^{N}a_i\mathbf{x}_i^T\hat{\mathbf{x}}
+%\end{equation}
+%, i.e., instead of solving for $\mathbf{w}$, we solve for $\mathbf{a}$.
+%\end{frame}
+
+\begin{frame}{Ridge Regression}
+Given $N$ training samples $(\mathbf{x}_i,y_i)$, where $\mathbf{x}_i\in\mathbb{R}^\ell$ are regressors and $y_i\in\mathbb{R}$ are targets, we want to find a linear function $f_\mathbf{w}(\mathbf{x})=\mathbf{w}^T\mathbf{x}$ that minimizes the squared error loss function with $L_2$ regularization,
+\begin{equation}\label{eq:loss}
+  L(\mathbf{w})=\underbrace{\sum_{i=1}^{N}(y_i-\mathbf{w}^T\mathbf{x}_i)^2}_\text{squared error}+\underbrace{\alpha\Vert\mathbf{w}\Vert^2}_\text{Tikhonov regularization}
+\end{equation}
+, where $\alpha$ is a hyperparameter\footnote{A hyperparameter is a parameter whose value is set before the learning process begins.} that controls the degree of overfitting.
+\end{frame}
+
+\begin{frame}{Regression Function and Dual Form}
 \scriptsize
-Linear regression:\\
-Given $N$ training samples, $(\mathbf{x}_i,y_i)$, $i=1,...,N$, where $\mathbf{x}_i$'s $\in\mathbb{R}^\ell$ are predictor variables and $y_i$'s $\in\mathbb{R}$ are target variables of training samples, find a linear function
+Solution to \ref{eq:loss} is
 \begin{equation}
-  f_\mathbf{w}(\mathbf{x})=\mathbf{w}^T\mathbf{x}
-\end{equation}
-that minimizes the quadratic cost,
-\begin{equation}
-  C(\mathbf{w})=\frac{1}{2}\sum_{i=1}^{N}(y_i-\mathbf{w}^T\mathbf{x}_i)^2
-\end{equation}
-$\mathbf{w}$ that minimizes the cost function is readily found by solving the \emph{normal equation}:
-\begin{equation}
-  \mathbf{X}^T\mathbf{X}\mathbf{w}=\mathbf{X}^T\mathbf{y}
+\mathbf{w}=(\mathbf{X}^T\mathbf{X}+\alpha\mathbf{I})^{-1}\mathbf{X}^T\mathbf{y}
 \end{equation}
 , where $\mathbf{X}$ is the so called \emph{design matrix}, 
 \begin{equation}
   \mathbf{X}=\begin{pmatrix}\mathbf{x}_1^T \\ \vdots \\ \mathbf{x}_N^T \end{pmatrix}
 \end{equation}
+$\mathbf{w}$ can be rewritten as
+\begin{equation}
+\mathbf{w}=\mathbf{X}^T(\mathbf{X}\mathbf{X}^T+\alpha\mathbf{I})^{-1}\mathbf{y}
+\end{equation}
+With this \emph{dual form}, given a test sample $\mathbf{x}_t$, the predicted value is
+\begin{equation}
+\hat{y}_t=\sum_{i=1}^{N}a_i\mathbf{x}_i^T\mathbf{x}_t
+\end{equation} \label{eq:sol}
+Here, $\mathbf{a}=(\mathbf{X}\mathbf{X}^T+\alpha\mathbf{I})^{-1}\mathbf{y}$, and $\mathbf{X}\mathbf{X}^T$ is a Gram matrix with elements $[\mathbf{X}\mathbf{X}^T]_{ij}=\mathbf{x}_i^T\mathbf{x}_j$.
 \end{frame}
 
-\begin{frame}{Ridge Regression and Dual Form}
-\tiny
-Very often, the predictor variables vary in a similar way, known as near collinearity. In such cases, $\mathbf{X}^T\mathbf{X}$ is almost singular, and the resulting $\mathbf{w}$ becomes highly sensitive to variations, leading to overfitting.\\
-Applying Tikhonov regularization leads to ridge regression, namely, minimizing the cost function
+\begin{frame}{Nonlinear Regression with Feature Map}
+A second order polynomial can be written as
 \begin{equation}
-  C(\mathbf{w})=\frac{1}{2}\sum_{i=1}^{N}(y_i-\mathbf{w}^T\mathbf{x}_i)^2+\frac{1}{2}\alpha\Vert\mathbf{w}\Vert^2
+f_\mathbf{w}(x)=w_0+w_1x+w_2x^2=\mathbf{w}^T\bm{\phi}(x)
 \end{equation}
-with the solution
+With the \emph{feature map} $\bm{\phi}:\mathbb{R}\rightarrow\mathbb{R}^3$, $\bm{\phi}(x)=(1,x,x^2)^T$, nonlinear regression in the \emph{input space} $\mathbb{R}$ is equivalent to linear regression in the \emph{feature space} $\mathbb{R}^3$. \\
+Formula obtained with the linear case apply here, as long as $\mathbf{x}$ is replaced by $\bm{\phi}(\mathbf{x})$.
+\end{frame}
+
+\begin{frame}{Kernel Trick}
+\begin{itemize}
+  \item Note that in the solution formula \ref{eq:sol}, every occurrence of a regressor $\mathbf{x}$ is accompanied by another regressor $\mathbf{x}'$ in the form of an inner product of the two.
+  \item In the nonlinear case, it's $\bm{\phi}^T(\mathbf{x})\bm{\phi}(\mathbf{x}')$.
+  \item If we can find a kernel function $k:\mathbb{R}^\ell\times\mathbb{R}^\ell\rightarrow\mathbb{R}$ such that $k(\mathbf{x},\mathbf{x}')=\bm{\phi}^T(\mathbf{x})\bm{\phi}(\mathbf{x}')$, $\forall\mathbf{x},\mathbf{x}'\in\mathbb{R}^\ell$, then we can obtain the solution without actually performing the feature map, which is computationally heavy and sometimes even impossible (ex. infinite dimensional feature space).
+  \item Note that given a kernel the feature map and feature space are not unique.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The RBF (Gaussian) Kernel}
+\footnotesize
+One of the most commonly used kernels is the radial basis function (RBF), or Gaussian kernel:
 \begin{equation}
-  \mathbf{w}=(\mathbf{X}^T\mathbf{X}+\alpha\mathbf{I})^{-1}\mathbf{X}^T\mathbf{y}
+  k(\mathbf{x},\mathbf{x}')=e^{-\gamma\Vert\mathbf{x}-\mathbf{x}'\Vert^2}
 \end{equation}
-\textcolor{blue}{The cost function is convex, which guarantees a global minimum. (Very different from NN case.)}\\
-Note that $\mathbf{w}$ can be rewritten\footnote{See \href{http://stat.wikia.com/wiki/Kernel_Ridge_Regression}{here} for details.} as $\mathbf{w}=\mathbf{X}^T(\mathbf{X}\mathbf{X}^T+\alpha\mathbf{I})^{-1}\mathbf{y}$.\\
-For a test sample $\hat{\mathbf{x}}$, the predicted value $\hat{y}=\mathbf{w}^T\hat{\mathbf{x}}=\hat{\mathbf{x}}^T\mathbf{w}=\hat{\mathbf{x}}^T\mathbf{X}^T(\mathbf{X}\mathbf{X}^T+\alpha\mathbf{I})^{-1}\mathbf{y}$. Now, let $\mathbf{a}=(\mathbf{X}\mathbf{X}^T+\alpha\mathbf{I})^{-1}\mathbf{y}$, we arrive at the \textcolor{red}{\emph{dual form}}:
+For $\ell=1$, a heuristic feature map of the RBF kernel is
 \begin{equation}
-  \hat{y}=\sum_{i=1}^{N}a_i\mathbf{x}_i^T\hat{\mathbf{x}}
+  \bm{\phi}(x)=\underbrace{e^{-\gamma x^2}}_\text{local}\underbrace{\left(1,\sqrt{\frac{2\gamma}{1!}}x,\sqrt{\frac{(2\gamma)^2}{2!}}x^2,\dots\right)^T}_\text{polynomial of all orders}
 \end{equation}
-, i.e., instead of solving for $\mathbf{w}$, we solve for $\mathbf{a}$.
+, where we can see that the feature map of the RBF kernel is like local fit to polynomials of all orders.
+\begin{itemize}
+  \item The RBF kernel works so well in many cases that it is usually one of the default kernels to try out.
+  \begin{itemize}
+    \scriptsize
+    \item I will use this kernel throughout the study.
+  \end{itemize}
+    \item The hyperparameter $\gamma$ controls how far the effect of a training sample can reach.
+\end{itemize}
 \end{frame}
 
 \end{document}
