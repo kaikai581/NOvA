@@ -229,6 +229,9 @@ Formula obtained with the linear case apply here, as long as $\mathbf{x}$ is rep
 \begin{itemize}
   \item Note that in the solution formula \ref{eq:sol}, every occurrence of a regressor $\mathbf{x}$ is accompanied by another regressor $\mathbf{x}'$ in the form of an inner product of the two.
   \item In the nonlinear case, it's $\bm{\phi}(\mathbf{x})^T\bm{\phi}(\mathbf{x}')$.
+  \begin{itemize}
+    \item Dimensionality of range of $\bm{\phi}$ becomes implicit and not important anymore.
+  \end{itemize}
   \item If we can find a kernel function $k:\mathbb{R}^\ell\times\mathbb{R}^\ell\rightarrow\mathbb{R}$ such that $k(\mathbf{x},\mathbf{x}')=\bm{\phi}(\mathbf{x})^T\bm{\phi}(\mathbf{x}')$, $\forall\mathbf{x},\mathbf{x}'\in\mathbb{R}^\ell$, then we can obtain the solution without actually performing the feature map, which is computationally heavy and sometimes even impossible (ex. infinite-dimensional feature space).
   \item Note that given a kernel the feature map and feature space are not unique.
 \end{itemize}
