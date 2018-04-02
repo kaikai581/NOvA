@@ -42,6 +42,7 @@
 \usepackage{empheq}
 \usepackage{eso-pic}
 \usepackage{fontspec}
+\usepackage{hyperref}
 \usepackage{textcomp}
 \usepackage{multirow}
 \setsansfont{Linux Biolinum O}
@@ -269,7 +270,12 @@ The solution function in the nonlinear problem to minimize a class of loss funct
 
 \begin{frame}{Features of Kernel Methods}
   \begin{itemize}
-    \item Unlike the \emph{binned} spline fit, this is an \emph{unbinned} algorithm.
+    \item Nonparametric model
+    \begin{itemize}
+      \item Number of parameters grows with number of training samples.
+      \item In this case, it's the $\mathbf{a}$ vector.
+    \end{itemize}
+    \item Unlike the \emph{binned} spline fit, this is an \emph{unbinned} fit.
     \item Positive definite kernels\footnote{Most commonly used kernels belong to this class, including RBF, but not sigmoid.} make the loss function convex. Therefore, a global minimum is guaranteed.
     \begin{itemize}
       \item Very different from neural networks.
@@ -280,10 +286,44 @@ The solution function in the nonlinear problem to minimize a class of loss funct
     \end{itemize}
     \item Including more variables is a no-brainer.
     \begin{itemize}
-      \item How to engineer a regression surface embedded in 3D after all? More dimension?
+      \item How to design a regression surface embedded in 3D after all? More dimension?
       \item Opens up ``feature engineering".
     \end{itemize}
   \end{itemize}
+\end{frame}
+
+\begin{frame}{Hands-on!}
+\small
+Time to get hands dirty:
+\begin{itemize}
+  \item datasets\\
+  \nolinkurl{prod_caf_R17-11-14-prod4reco.d_nd_genie_nonswap_fhc_nova_v08_period3_v1}
+  \item cuts\\
+  \nolinkurl{kNumuCutND2018 && kIsNumuCC}
+  \item weights
+  \begin{itemize}
+    \scriptsize
+    \item No weight for the proof of concept rounds
+    \item For the newest results, \nolinkurl{kXSecCVWgt2018 * kPPFXFluxCVWgt}
+  \end{itemize}
+  \item variables\\
+  regressor
+  \begin{itemize}
+    \scriptsize
+    \item \nolinkurl{kNumuHadVisE} for first attempts
+    \item later add CVN particle final state scores for $p$, $n$, $\pi^0$, $\pi^{\pm}$, and number of prongs
+  \end{itemize}
+  target\\
+  \begin{itemize}
+    \scriptsize
+    \item always \nolinkurl{kTrueE} (true neutrino energy) - \nolinkurl{kMuE} (prod4 reco muon energy)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{1D regressor ($E_{vishad}$), 0.5\% total statistics}
+\centering
+\includegraphics[width=\textwidth]{figures/{prod4_krr_side_by_side_a0.5g0.5step200offset0}.pdf}
 \end{frame}
 
 \end{document}
