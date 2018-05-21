@@ -52,9 +52,12 @@ public:
   int fNChannels;
   int fHeight;
   int fWidth;
+  DataType fH5Type;
   T**** fData;
   
 private:
+  void  GetH5Type();
+  
   T***  B; ///< B, C, and D are auxiliary arrays.
   T**   C; ///< B, C, and D are auxiliary arrays.
   T*    D; ///< B, C, and D are auxiliary arrays.
@@ -77,6 +80,8 @@ fNEntries(nentry), fNChannels(nchannel), fHeight(height), fWidth(width)
     }
     fData[i] = B+fNChannels*i;
   }
+  
+  GetH5Type();
 }
 
 template <class T>
@@ -86,6 +91,15 @@ ContiguousArray4D<T>::~ContiguousArray4D()
   delete [] C;
   delete [] B;
   delete [] fData;
+}
+
+template <class T>
+void ContiguousArray4D<T>::GetH5Type()
+{
+  /// Default to unsigned char.
+  fH5Type = PredType::STD_U8LE;
+  /// Options for unsignd inters with other sizes.
+  if(is_same<T, unsigned int>::value) fH5Type = PredType::STD_U32LE;
 }
 
 //------------------------------------------------------------------------------
@@ -150,7 +164,32 @@ void LabelData<T>::FillLabel(cvn::TrainingData* data, int entry)
 }
 
 //------------------------------------------------------------------------------
-void HDF5Fill(const H5std_string& FILE_NAME, const H5std_string& DATASET_NAME, const DataType& dtype, PixelMapData<unsigned char>& data, LabelData<unsigned char>& label)
+// The event id has shape N x 1 x 1 x 4.
+template <class T>
+class EventIDData : public ContiguousArray4D<T>
+{
+public:
+  EventIDData(int a) : ContiguousArray4D<T>(a, 1, 1, 5) {};
+  void FillID(cvn::TrainingData*, int);
+};
+
+template <class T>
+void EventIDData<T>::FillID(cvn::TrainingData* data, int entry)
+{
+  /// Check index range.
+  if(entry >= this->fNEntries) return;
+  this->fData[entry][0][0][0] = data->fRun;
+  this->fData[entry][0][0][1] = data->fSubrun;
+  this->fData[entry][0][0][2] = data->fCycle;
+  this->fData[entry][0][0][3] = data->fEvt;
+  this->fData[entry][0][0][4] = data->fSubevt;
+}
+
+//------------------------------------------------------------------------------
+void HDF5Fill(const H5std_string& FILE_NAME,
+              PixelMapData<unsigned char>& data,
+              LabelData<unsigned char>& label,
+              EventIDData<unsigned int>& id)
 {
   try {
     // Turn off the auto-printing when failure occurs so that we can
@@ -169,11 +208,11 @@ void HDF5Fill(const H5std_string& FILE_NAME, const H5std_string& DATASET_NAME, c
     DataSpace dataspace(4, dims);
     
     // Create the dataset.
-    DataSet dataset = file.createDataSet(DATASET_NAME, dtype, dataspace);
+    DataSet dataset = file.createDataSet("data", data.fH5Type, dataspace);
     
     // Write the data to the dataset using default memory space, file
     // space, and transfer properties.
-    dataset.write(&data.fData[0][0][0][0], dtype);
+    dataset.write(&data.fData[0][0][0][0], data.fH5Type);
     
     // Create the data space for the labels.
     hsize_t ldims[4];               // label dimensions
@@ -184,8 +223,20 @@ void HDF5Fill(const H5std_string& FILE_NAME, const H5std_string& DATASET_NAME, c
     DataSpace labelspace(4, ldims);
     
     // Create the label dataset.
-    DataSet ldataset = file.createDataSet("label", dtype, labelspace);
-    ldataset.write(&label.fData[0][0][0][0], dtype);
+    DataSet ldataset = file.createDataSet("label", label.fH5Type, labelspace);
+    ldataset.write(&label.fData[0][0][0][0], label.fH5Type);
+    
+    // Create the data space for the ids.
+    hsize_t idims[4];               // label dimensions
+    idims[0] = id.fNEntries;
+    idims[1] = id.fNChannels;
+    idims[2] = id.fHeight;
+    idims[3] = id.fWidth;
+    DataSpace idspace(4, idims);
+    
+    // Create the id dataset.
+    DataSet idataset = file.createDataSet("id", id.fH5Type, idspace);
+    idataset.write(&id.fData[0][0][0][0], id.fH5Type);
   }
   catch(FileIException error) { // catch failure caused by the H5File operations
     error.printError();
@@ -271,7 +322,9 @@ void fill(po::variables_map& opts)
   PixelMapData<unsigned char> trainingSample(nTrain, nChannels, cells, planes);
   PixelMapData<unsigned char> testSample(nTest, nChannels, cells, planes);
   LabelData<unsigned char>    trainingLabel(nTrain);
-  LabelData<unsigned char>    testLabel(nTrain);
+  LabelData<unsigned char>    testLabel(nTest);
+  EventIDData<unsigned int>   trainingID(nTrain);
+  EventIDData<unsigned int>   testID(nTest);
   
   
   /// Start event loop and extract data
@@ -307,6 +360,8 @@ void fill(po::variables_map& opts)
       
       /// Fill event label
       trainingLabel.FillLabel(data, iTrain);
+      /// Fill event id
+      trainingID.FillID(data, iTrain);
       
       iTrain++;
     }
@@ -333,6 +388,8 @@ void fill(po::variables_map& opts)
       
       /// Fill test label
       testLabel.FillLabel(data, iTest);
+      /// Fill event id
+      testID.FillID(data, iTest);
       
       iTest++;
     }
@@ -342,8 +399,8 @@ void fill(po::variables_map& opts)
     if(!(eprog % 100)) cout << eprog << " events finished." << endl;
   } // Done with all data filling.
 
-  HDF5Fill("training_data.h5", "data", PredType::STD_U8LE, trainingSample, trainingLabel);
-  HDF5Fill("test_data.h5", "data", PredType::STD_U8LE, testSample, testLabel);
+  HDF5Fill("training_data.h5", trainingSample, trainingLabel, trainingID);
+  HDF5Fill("test_data.h5", testSample, testLabel, testID);
 }
 
 int main(int argc, char* argv[])
