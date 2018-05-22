@@ -20,7 +20,6 @@
 
 // ROOT includes
 #include "TChain.h"
-#include "TFile.h"
 #include "TSystem.h"
 #include "Cintex/Cintex.h"
 
@@ -41,6 +40,8 @@ using namespace std;
 //------------------------------------------------------------------------------
 // To write to HDF5, a contiguous memory block for data is required.
 // This class allocates a big linear chunk of memory and records data shape.
+// At this moment the classes only support one or four bytes unsigned numbers.
+// In the case of label class, integer is also included for PDG values.
 template <class T>
 class ContiguousArray4D
 {
@@ -56,7 +57,7 @@ public:
   T**** fData;
   
 private:
-  void  GetH5Type();
+  void  SetH5Type();
   
   T***  B; ///< B, C, and D are auxiliary arrays.
   T**   C; ///< B, C, and D are auxiliary arrays.
@@ -81,7 +82,7 @@ fNEntries(nentry), fNChannels(nchannel), fHeight(height), fWidth(width)
     fData[i] = B+fNChannels*i;
   }
   
-  GetH5Type();
+  SetH5Type();
 }
 
 template <class T>
@@ -94,15 +95,106 @@ ContiguousArray4D<T>::~ContiguousArray4D()
 }
 
 template <class T>
-void ContiguousArray4D<T>::GetH5Type()
+void ContiguousArray4D<T>::SetH5Type()
 {
   /// Default to unsigned char.
   fH5Type = PredType::STD_U8LE;
-  /// Options for unsignd inters with other sizes.
+  /// Options for unsignd integers with other sizes.
   if(is_same<T, unsigned int>::value) fH5Type = PredType::STD_U32LE;
 }
+//--end of ContiguousArray4D definition-----------------------------------------
+// define simple 2D array for labels--------------------------------------------
+template <class T>
+class ContiguousArray2D
+{
+  public:
+  ContiguousArray2D(int, int);
+  ~ContiguousArray2D();
+  
+  int fNEntries, fNKeys;
+  DataType fH5Type;
+  T** fData;
+  
+private:
+  void  SetH5Type();
+  
+  T*    D; ///< D is an auxiliary array.
+};
+
+template <class T>
+ContiguousArray2D<T>::ContiguousArray2D(int nentry, int nkeys):
+fNEntries(nentry), fNKeys(nkeys)
+{
+  fData  = new T*[fNEntries];
+  D = new T[fNEntries*fNKeys];
+  for(int i = 0; i < fNEntries; i++)
+    fData[i] = D + fNKeys*i;
+      
+  SetH5Type();
+}
+
+template <class T>
+ContiguousArray2D<T>::~ContiguousArray2D()
+{
+  delete [] D;
+  delete [] fData;
+}
+
+template <class T>
+void ContiguousArray2D<T>::SetH5Type()
+{
+  /// Default to unsigned char.
+  fH5Type = PredType::STD_U8LE;
+  /// Options for unsignd integers with other sizes.
+  if(is_same<T, unsigned int>::value) fH5Type = PredType::STD_U32LE;
+}
+//--end of ContiguousArray2D definition-----------------------------------------
+// define simple 1D array for labels--------------------------------------------
+template <class T>
+class ContiguousArray1D
+{
+public:
+  ContiguousArray1D(int);
+  ~ContiguousArray1D();
+  
+  int fNEntries;
+  DataType fH5Type;
+  T* fData;
+  
+private:
+  void  SetH5Type();
+};
+
+template <class T>
+ContiguousArray1D<T>::~ContiguousArray1D()
+{
+  delete [] fData;
+}
+
+template <class T>
+ContiguousArray1D<T>::ContiguousArray1D(int nentry):
+fNEntries(nentry)
+{
+  fData  = new T[fNEntries];
+  SetH5Type();
+}
+
+template <class T>
+void ContiguousArray1D<T>::SetH5Type()
+{
+  /// Default to unsigned char.
+  fH5Type = PredType::STD_U8LE;
+  /// Options for unsignd integers with other sizes.
+  if(is_same<T, unsigned int>::value) fH5Type = PredType::STD_U32LE;
+  /// Options for signd integers
+  if(is_same<T, int>::value) fH5Type = PredType::STD_I32LE;
+}
+//--end of ContiguousArray1D definition-----------------------------------------
 
 //------------------------------------------------------------------------------
+// definition of data containers
+//------------------------------------------------------------------------------
+// data shape is (# entries) x (# channels) x (# heights) x (# widths)
 template <class T>
 class PixelMapData : public ContiguousArray4D<T>
 {
@@ -145,31 +237,32 @@ unsigned char PixelMapData<T>::DigitizeTime(float time, float toffset)
 }
 
 //------------------------------------------------------------------------------
-// Here the assumption is made that the label shape is N x 1 x 1 x 1,
+// Here the assumption is made that the label shape is (N,),
 // where N is the number of entries.
 template <class T>
-class LabelData : public ContiguousArray4D<T>
+class LabelData : public ContiguousArray1D<T>
 {
 public:
-  LabelData(int a) : ContiguousArray4D<T>(a, 1, 1, 1) {};
-  void FillLabel(cvn::TrainingData*, int);
+  LabelData(int a) : ContiguousArray1D<T>(a) {};
+  void FillLabel(cvn::TrainingData*, int, T);
 };
 
 template <class T>
-void LabelData<T>::FillLabel(cvn::TrainingData* data, int entry)
+void LabelData<T>::FillLabel(cvn::TrainingData* data, int entry, T val)
 {
   /// Check index range.
   if(entry >= this->fNEntries) return;
-  this->fData[entry][0][0][0] = data->fInt;
+  this->fData[entry] = val;
 }
 
 //------------------------------------------------------------------------------
-// The event id has shape N x 1 x 1 x 4.
+// The event id has shape (N,5),
+// where N is the number of entries.
 template <class T>
-class EventIDData : public ContiguousArray4D<T>
+class EventIDData : public ContiguousArray2D<T>
 {
 public:
-  EventIDData(int a) : ContiguousArray4D<T>(a, 1, 1, 5) {};
+  EventIDData(int a) : ContiguousArray2D<T>(a, 5) {};
   void FillID(cvn::TrainingData*, int);
 };
 
@@ -178,18 +271,20 @@ void EventIDData<T>::FillID(cvn::TrainingData* data, int entry)
 {
   /// Check index range.
   if(entry >= this->fNEntries) return;
-  this->fData[entry][0][0][0] = data->fRun;
-  this->fData[entry][0][0][1] = data->fSubrun;
-  this->fData[entry][0][0][2] = data->fCycle;
-  this->fData[entry][0][0][3] = data->fEvt;
-  this->fData[entry][0][0][4] = data->fSubevt;
+  this->fData[entry][0] = data->fRun;
+  this->fData[entry][1] = data->fSubrun;
+  this->fData[entry][2] = data->fCycle;
+  this->fData[entry][3] = data->fEvt;
+  this->fData[entry][4] = data->fSubevt;
 }
 
 //------------------------------------------------------------------------------
+// data write out
 void HDF5Fill(const H5std_string& FILE_NAME,
               PixelMapData<unsigned char>& data,
-              LabelData<unsigned char>& label,
-              EventIDData<unsigned int>& id)
+              LabelData<unsigned char>&    mode_label,
+              LabelData<int>&              pdg_label,
+              EventIDData<unsigned int>&   id)
 {
   try {
     // Turn off the auto-printing when failure occurs so that we can
@@ -214,35 +309,40 @@ void HDF5Fill(const H5std_string& FILE_NAME,
     // space, and transfer properties.
     dataset.write(&data.fData[0][0][0][0], data.fH5Type);
     
-    // Create the data space for the labels.
-    hsize_t ldims[4];               // label dimensions
-    ldims[0] = label.fNEntries;
-    ldims[1] = label.fNChannels;
-    ldims[2] = label.fHeight;
-    ldims[3] = label.fWidth;
-    DataSpace labelspace(4, ldims);
+    // Create the data space for interaction mode labels.
+    hsize_t mldims[1];               // label dimensions
+    mldims[0] = mode_label.fNEntries;
+    DataSpace modelabelspace(1, mldims);
     
     // Create the label dataset.
-    DataSet ldataset = file.createDataSet("label", label.fH5Type, labelspace);
-    ldataset.write(&label.fData[0][0][0][0], label.fH5Type);
+    DataSet mldataset = file.createDataSet("interaction_mode", mode_label.fH5Type, modelabelspace);
+    mldataset.write(&mode_label.fData[0], mode_label.fH5Type);
+    
+    // Create the data space for pdg labels.
+    hsize_t pldims[1];               // label dimensions
+    pldims[0] = pdg_label.fNEntries;
+    DataSpace pdglabelspace(1, pldims);
+    
+    // Create the label dataset.
+    DataSet pldataset = file.createDataSet("pdg", pdg_label.fH5Type, pdglabelspace);
+    pldataset.write(&pdg_label.fData[0], pdg_label.fH5Type);
     
     // Create the data space for the ids.
-    hsize_t idims[4];               // label dimensions
+    hsize_t idims[2];               // label dimensions
     idims[0] = id.fNEntries;
-    idims[1] = id.fNChannels;
-    idims[2] = id.fHeight;
-    idims[3] = id.fWidth;
-    DataSpace idspace(4, idims);
+    idims[1] = id.fNKeys;
+    DataSpace idspace(2, idims);
     
     // Create the id dataset.
     DataSet idataset = file.createDataSet("id", id.fH5Type, idspace);
-    idataset.write(&id.fData[0][0][0][0], id.fH5Type);
+    idataset.write(&id.fData[0][0], id.fH5Type);
   }
   catch(FileIException error) { // catch failure caused by the H5File operations
     error.printError();
     return;
   }
 }
+
 
 void fill(po::variables_map& opts)
 {
@@ -268,7 +368,7 @@ void fill(po::variables_map& opts)
       chain.Add(ifname.c_str());
       
   }//end if list file
-
+  
   else if  (boost::ends_with(input,".root")) {
     chain.Add(input.c_str());
   }//end if root file
@@ -289,7 +389,7 @@ void fill(po::variables_map& opts)
     std::cout << "Error: Input tree has no entries." << std::endl;
     exit(4);
   }
-  
+
   /// Traning data need to be shuffled. Realizing this by making an ordered list
   /// of consecutive numbers and shuffle them.
   std::srand ( unsigned ( std::time(0) ) );
@@ -321,10 +421,12 @@ void fill(po::variables_map& opts)
   /// Data containers
   PixelMapData<unsigned char> trainingSample(nTrain, nChannels, cells, planes);
   PixelMapData<unsigned char> testSample(nTest, nChannels, cells, planes);
-  LabelData<unsigned char>    trainingLabel(nTrain);
-  LabelData<unsigned char>    testLabel(nTest);
   EventIDData<unsigned int>   trainingID(nTrain);
   EventIDData<unsigned int>   testID(nTest);
+  LabelData<unsigned char>    trainingModeLabel(nTrain);
+  LabelData<unsigned char>    testModeLabel(nTest);
+  LabelData<int>    trainingPdgLabel(nTrain);
+  LabelData<int>    testPdgLabel(nTest);
   
   
   /// Start event loop and extract data
@@ -359,7 +461,8 @@ void fill(po::variables_map& opts)
           trainingSample.FillTime(data, iTrain, iCell, iPlane, tmin);
       
       /// Fill event label
-      trainingLabel.FillLabel(data, iTrain);
+      trainingModeLabel.FillLabel(data, iTrain, data->fInt);
+      trainingPdgLabel.FillLabel(data, iTrain, data->fNuPdg);
       /// Fill event id
       trainingID.FillID(data, iTrain);
       
@@ -387,7 +490,8 @@ void fill(po::variables_map& opts)
           testSample.FillTime(data, iTest, iCell, iPlane, tmin);
       
       /// Fill test label
-      testLabel.FillLabel(data, iTest);
+      testModeLabel.FillLabel(data, iTest, data->fInt);
+      testPdgLabel.FillLabel(data, iTest, data->fNuPdg);
       /// Fill event id
       testID.FillID(data, iTest);
       
@@ -398,10 +502,12 @@ void fill(po::variables_map& opts)
     int eprog = iEntry + 1;
     if(!(eprog % 100)) cout << eprog << " events finished." << endl;
   } // Done with all data filling.
-
-  HDF5Fill("training_data.h5", trainingSample, trainingLabel, trainingID);
-  HDF5Fill("test_data.h5", testSample, testLabel, testID);
+  
+  // In the end, write to HDF5 files.
+  HDF5Fill("training_data.h5", trainingSample, trainingModeLabel, trainingPdgLabel, trainingID);
+  HDF5Fill("test_data.h5", testSample, testModeLabel, testPdgLabel, testID);
 }
+
 
 int main(int argc, char* argv[])
 {
@@ -411,7 +517,7 @@ int main(int argc, char* argv[])
     desc.add_options()
       ("help", "produce help message")
       ("NEvents,n", po::value<unsigned int>()->default_value(UINT_MAX), "Number of events to run through")
-      ("InputFile,i", po::value<string>()->default_value("/nova/ana/users/slin/temp/cvn_test/test_input.list"), "file name of input file (.root) or list (.list)")
+      ("InputFile,i", po::value<string>()->default_value("/nova/ana/users/slin/temp/cvn_test/event_dump_round2/test_input.list"), "file name of input file (.root) or list (.list)")
       ("TreeName", po::value<string>()->default_value("cvndump/CVNTrainTree"), "name of the data tree")
       ("TrainingDataBranchName", po::value<string>()->default_value("train"), "name of the training data branch")
       ("NTrainPerTest", po::value<int>()->default_value(4), "Ratio of training to test data. Ex. 4 means 80/20 split.")
