@@ -1,0 +1,10 @@
+Like what we found in 2018, when we looked at systematic uncertainties in neutrino energy,
+the uncertainties exploded with >40%.
+
+Later we found only 1/7 of the detector systematic samples were created with the correct
+calibration constants.
+
+All the above was done with the "check_light_syst" folder.
+
+Now that we know what are wrong and what are not affected, I use "plot_systs" for
+investigating the unaffected systematics.

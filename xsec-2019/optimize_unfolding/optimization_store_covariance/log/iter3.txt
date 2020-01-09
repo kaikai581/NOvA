@@ -1,0 +1,36 @@
+
+Processing /cvmfs/nova.opensciencegrid.org/externals/genie/v3_00_04_rc/Linux64bit+2.6-2.12-e15-debug/GENIE-Generator/src/scripts/gcint/loadlibs.C...
+(int) 0
+Processing /cvmfs/nova-development.opensciencegrid.org/novasoft//releases/development/CAFAna/load_libs.C...
+Loading libraries...................
+Welcome to the ROOT of all evils 
+Processing /cvmfs/nova-development.opensciencegrid.org/novasoft//releases/development/NDAna/numucc_inc/load_libs_numuccinc.C...
+Processing optimize_iterations.C+(3)...
+Warning! HistCache memory usage exceeds 500MB. That probably means histograms are being returned to the cache that weren't originally handed out by it. 
+Gave out 2 histograms, got back 1 of them (1 lost), in 0 different shapes.
+Holding 1 histograms for an estimated memory usage of 734626816 bytes.
+Now clearing cache. This could take a long time...
+Done clearing cache
+***** Constructing RooUnfold response matrix takes 9 seconds.
+***** 3 iterations of unfolding takes 0 seconds.
+Now unfolding...
+Iteration : 0
+Chi^2 of change 570940
+Iteration : 1
+Chi^2 of change 93936.4
+Iteration : 2
+Chi^2 of change 27494.4
+Calculating covariances due to number of measured events
+covariance matrix condition=-1, determinant=0, tolerance=2.22045e-16
+Warning: bad covariance matrix condition (-1)
+Inverse covariance matrix 495.245% maximum error
+***** Calculating chi-square takes 34052 seconds.
+***** Retrieving reconstructed spectrum with errors calculated with covariance matrix takes 1 seconds.
+***** Inverting covariance matrix takes 1022 seconds.
+***** Calculating global average covariance takes 0 seconds.
+Unfolding done.
+Warning! HistCache memory usage exceeds 500MB. That probably means histograms are being returned to the cache that weren't originally handed out by it. 
+Gave out 3 histograms, got back 3 of them (0 lost), in 1 different shapes.
+Holding 2 histograms for an estimated memory usage of 734735232 bytes.
+Now clearing cache. This could take a long time...
+Done clearing cache

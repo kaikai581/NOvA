@@ -1,0 +1,39 @@
+Now unfolding...
+Iteration : 0
+Chi^2 of change 570940
+Iteration : 1
+Chi^2 of change 93936.4
+Iteration : 2
+Chi^2 of change 27494.4
+Iteration : 3
+Chi^2 of change 11800.6
+Iteration : 4
+Chi^2 of change 6121.54
+Iteration : 5
+Chi^2 of change 3511.99
+Iteration : 6
+Chi^2 of change 2217.69
+Iteration : 7
+Chi^2 of change 1526.67
+Iteration : 8
+Chi^2 of change 1092.28
+Iteration : 9
+Chi^2 of change 793.297
+Iteration : 10
+Chi^2 of change 614.788
+Iteration : 11
+Chi^2 of change 495.981
+Iteration : 12
+Chi^2 of change 397.698
+Iteration : 13
+Chi^2 of change 316.572
+Calculating covariances due to number of measured events
+covariance matrix condition=-1, determinant=0, tolerance=2.22045e-16
+Warning: bad covariance matrix condition (-1)
+Inverse covariance matrix 207.748% maximum error
+Unfolding done.
+Warning! HistCache memory usage exceeds 500MB. That probably means histograms are being returned to the cache that weren't originally handed out by it.
+Gave out 3 histograms, got back 3 of them (0 lost), in 1 different shapes.
+Holding 2 histograms for an estimated memory usage of 734735232 bytes.
+Now clearing cache. This could take a long time...
+Done clearing cache

@@ -1,0 +1,1 @@
+submit_cafana.py --numuccinc -n 100 -o $DROPBOXCAFANA -r S19-07-18 extract_tunfold.C 0

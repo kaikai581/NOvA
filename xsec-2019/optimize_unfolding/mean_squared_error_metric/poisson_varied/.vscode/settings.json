@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "poisson_fluctuate.C": "cpp",
+        "preprocess_input.C": "cpp"
+    }
+}

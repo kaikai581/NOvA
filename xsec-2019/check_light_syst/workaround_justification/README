@@ -1,0 +1,6 @@
+On March 5 we found the new full-stats systematic files still used the wrong calibration constants.
+We decided to shift 5% visible hardonic energy as our workaround.
+
+On finding-numu Slack channel Jon made requests to justify this method.
+I take on this:
+2. 2D delta Bkg/Bkg plot for the light-level systematic (to make the case that the “calibration-like” effects have a negligible effect on our purity)
